@@ -1,0 +1,36 @@
+Dependecies
+-----------
+- Python 2.7
+- Setuptools
+- Pip
+- Virtualenv
+
+Installation
+-----------
+
+1. Install python on machine.
+2. On windows, add python to Environment variables. Assuming Python 2.7,
+both folder path (c:\Python27) and Scripts folder (c:\Python27\Scripts).
+3. Install setuptools and pip.
+4. Install virtualenv:
+    pip install virtualenv
+5. Setup virtualenv on the above folder: 
+    cd ..
+    virtualenv venv
+6. Enter the virtual environment:
+    cd segurosAPI
+    ..\venv\Scripts\activate
+
+From within virtual environment
+
+7. Install requirements:
+    pip install -r requirements.txt
+
+8. Run server:
+    python webserver.py
+
+Troubleshooting
+------------
+If virtualenv venv fails to execute with an error like:
+    Filename x does not start with any of these prefixes.
+Try removing the PYTHONPATH variable from Environment variables.
