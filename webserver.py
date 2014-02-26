@@ -173,10 +173,10 @@ def after(response):
 
     return response
 
-@app.route('/docs')
-def docs():
-  return redirect('/static/docs.html')
-
+@app.route('/api/docs/')
+@app.route('/api/docs', endpoint='api-docs')
+def api_webdocs():
+  return redirect('/api/docs/index.html')
 
 if __name__ == '__main__':
   TodoItemWithResourceFields()
