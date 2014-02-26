@@ -153,8 +153,11 @@ class TodoList(Resource):
     TODOS[todo_id] = {'task': args['task']}
     return TODOS[todo_id], 201
 
-api.add_resource(TodoList, '/todos')
-api.add_resource(Todo, '/todos/<string:todo_id>')
+api.add_resource(SubscriptionBilling, '/subscriptions/charge', endpoint='chargeSubscription')
+api.add_resource(SubscriptionCancellation, '/subscriptions/cancel', endpoint='cancelSubscription')
+api.add_resource(SubscriptionStatus,  '/subscriptions/status/<string:numeroTelefono>', endpoint='getStatus')
+api.add_resource(SubscriptionClaim, '/subscriptions/claim', endpoint='ClaimSubscription')
+
 
 @app.after_request
 def after(response):
