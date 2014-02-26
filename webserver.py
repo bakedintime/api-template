@@ -4,14 +4,12 @@ from flask_restful_swagger import swagger
 
 app = Flask(__name__, static_url_path='/api/docs')
 
-###################################
-# This is important:
+# Swagger generator wrapper
 api = swagger.docs(Api(app), apiVersion='0.1',
                    basePath='http://localhost:5000',
                    resourcePath='/',
                    produces=["application/json", "text/html"],
                    api_spec_url='/api/specs')
-###################################
 
 TODOS = {
     'todo1': {'task': 'build an API'},
@@ -155,9 +153,6 @@ class TodoList(Resource):
     TODOS[todo_id] = {'task': args['task']}
     return TODOS[todo_id], 201
 
-##
-## Actually setup the Api resource routing here
-##
 api.add_resource(TodoList, '/todos')
 api.add_resource(Todo, '/todos/<string:todo_id>')
 
