@@ -3,7 +3,7 @@ from flask.ext.restful import reqparse, abort, Api, Resource, fields,\
     marshal_with
 from flask_restful_swagger import swagger
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/api/docs')
 
 ###################################
 # This is important:
