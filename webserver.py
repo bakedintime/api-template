@@ -93,12 +93,12 @@ class SubscriptionStatusResourceFields:
     subscription. 
   """
   resource_fields = {
+    'codigoReclamo':fields.String(),
+    'CUI':fields.String(),
+    'nombreCompleto':fields.String(),
     'numeroCertificado':fields.String(),
-    'numeroTelefono':fields.String,
-    'nombreCompleto':fields.String,
-    'CUI':fields.String,
-    'codigoReclamo':fields.String,
-    'cobertura':fields.Float
+    'numeroTelefono':fields.String(),
+    'cobertura':fields.Float(),
   }
 
 @swagger.model
