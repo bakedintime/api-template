@@ -141,88 +141,16 @@ class BaseResponseFields(object):
 def wrap_response(response, status, headers):
   return make_response(json.dumps(marshal(response, BaseResponseFields.resource_fields)), status, headers)
 
-class Todo(Resource):
-  "My TODO API"
-  @swagger.operation(
-      notes='get a todo item by ID',
-      responseClass=TodoItemWithResourceFields,
-      nickname='get',
-      # Parameters can be automatically extracted from URLs (e.g. <string:id>)
-      # but you could also override them here, or add other parameters.
-      parameters=[
-          {
-            "name": "todo_id_x",
-            "description": "The ID of the TODO item",
-            "required": True,
-            "allowMultiple": False,
-            "dataType": 'string',
-            "paramType": "path"
-          },
-          {
-            "name": "a_bool",
-            "description": "The ID of the TODO item",
-            "required": True,
-            "allowMultiple": False,
-            "dataType": 'boolean',
-            "paramType": "path"
-          }
-      ])
-  @marshal_with(TodoItemWithResourceFields.resource_fields)
-  def get(self, todo_id):
-    # This goes into the summary
-    "Get a todo task"
-    abort_if_todo_doesnt_exist(todo_id)
-    return TODOS[todo_id]
-
-  def delete(self, todo_id):
-    abort_if_todo_doesnt_exist(todo_id)
-    del TODOS[todo_id]
-    return '', 204
-
-  def put(self, todo_id):
-    args = parser.parse_args()
-    task = {'task': args['task']}
-    TODOS[todo_id] = task
-    return task, 201
 
 
-# TodoList
-#   shows a list of all todos, and lets you POST to add new tasks
-class TodoList(Resource):
 
-  def get(self):
-    return TODOS
+
+
 
   @swagger.operation(
-      notes='Creates a new TODO item',
-      responseClass=TodoItem.__name__,
-      nickname='create',
-      parameters=[
-          {
-            "name": "body",
-            "description": "A TODO item",
-            "required": True,
-            "allowMultiple": False,
-            "dataType": TodoItem.__name__,
-            "paramType": "body"
           }
-      ],
-      responseMes***REMOVED***ges=[
-          {
-              "code": 201,
-              "mes***REMOVED***ge": "Created. The URL of the created blueprint should " +
-              "be in the Location header"
           },
-          {
-              "code": 405,
-              "mes***REMOVED***ge": "Invalid input"
           }
-      ])
-  def post(self):
-    args = parser.parse_args()
-    todo_id = 'todo%d' % (len(TODOS) + 1)
-    TODOS[todo_id] = {'task': args['task']}
-    return TODOS[todo_id], 201
 
   def put(self):
     """
