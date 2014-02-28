@@ -71,6 +71,65 @@ class TodoItemWithResourceFields:
       'a_list_of_nested_types': fields.List(fields.Nested(ModelWithResourceFields.resource_fields)),
   }
 
+############################
+#####  Swagger models ######
+# Properties are documented 
+# for API description
+############################
+
+@swagger.model
+class SubscriptionStatusResourceFields:
+  """
+    Properties of the response when 
+    querying the current status of a 
+    subscription. 
+  """
+  resource_fields = {
+    'numeroCertificado':fields.String(),
+    'numeroTelefono':fields.String,
+    'nombreCompleto':fields.String,
+    'CUI':fields.String,
+    'codigoReclamo':fields.String,
+    'cobertura':fields.Float
+  }
+
+@swagger.model
+class MetaFields:
+  """
+    Nested properties of the 
+    meta tag of the base response 
+    format. 
+  """
+  resource_fields = {
+    'status':fields.String()
+  }
+
+@swagger.model
+@swagger.nested(status=MetaFields.__name__)
+class BaseResponseFields(object):
+  """
+    Properties of the base response
+    format for all API responses.
+  """
+  resource_fields = {
+    'meta':fields.Nested(MetaFields.resource_fields),
+    'errorCode':fields.String,
+    'errorMes***REMOVED***ge':fields.String,
+    'data':fields.Raw
+  }
+
+  def __init__(self, status, data, errorCode=None, errorMes***REMOVED***ge=None):
+    """
+      Base response constructor.
+      errorCode and errorMes***REMOVED***ge are only instatiated
+      when an error has ocurred.
+    """
+    self.meta = {}
+    self.meta['status'] = status
+    self.data = data
+    self.errorMes***REMOVED***ge = errorMes***REMOVED***ge
+    self.errorCode = errorCode
+
 
 class Todo(Resource):
   "My TODO API"
