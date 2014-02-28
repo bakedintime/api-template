@@ -11,7 +11,14 @@ api = swagger.docs(Api(app), apiVersion='0.1.0',
                    basePath='http://localhost:5000',
                    resourcePath='/',
                    produces=["application/json"],
-                   api_spec_url='/api/specs')
+                   api_spec_url='/api/specs',
+                   info=dict(
+                    title="Seguros API © Grupo TIR, S.A.",
+                    description="This is a ***REMOVED***mple server Petstore server.  You can find out more about Swagger \n    at <a href=\"http://swagger.wordnik.com\">http://swagger.wordnik.com</a> or on irc.freenode.net, #swagger.  For this ***REMOVED***mple,\n    you can use the api key \"special-key\" to test the authorization filters",
+                    contact="apiteam@tir.com.gt",
+                    license="Apache 2.0",
+                    licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.html"
+                  ))
 
 
 TODOS = {
