@@ -1,6 +1,7 @@
-from flask import Flask, redirect
-from flask.ext.restful import reqparse, abort, Api, Resource, fields, marshal_with
 # -*- coding: utf-8 -*-
+import random
+from flask import Flask, redirect, make_response, json
+from flask.ext.restful import reqparse, abort, Api, Resource, fields, marshal_with, marshal
 from flask_restful_swagger import swagger
 
 app = Flask(__name__, static_url_path='/api/docs')
