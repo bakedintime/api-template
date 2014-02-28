@@ -85,21 +85,47 @@ class TodoItemWithResourceFields:
 # for API description
 ############################
 
+# Requests
 @swagger.model
-class SubscriptionStatusResourceFields:
+class SubscriptionBillingOperationFields:
+  resource_fields = {
+    'id':fields.Integer(default=None),
+    'numeroTelefono':fields.String(),
+    'numeroCertificado':fields.String(),
+    'montoCobro':fields.Float(),
+    'fechaHora':fields.DateTime()
+  }
+
+@swagger.model
+@swagger.nested(requests=SubscriptionBillingOperationFields.__name__)
+class SubscriptionBillingRequest:
   """
-    Properties of the response when 
-    querying the current status of a 
-    subscription. 
   """
   resource_fields = {
-    'codigoReclamo':fields.String(),
-    'CUI':fields.String(),
-    'nombreCompleto':fields.String(),
-    'numeroCertificado':fields.String(),
-    'numeroTelefono':fields.String(),
-    'cobertura':fields.Float(),
+    'requests':fields.List(fields.Nested(SubscriptionBillingOperationFields.resource_fields))
   }
+
+@swagger.model
+class SubscriptionCancellationOperationFields:
+  resource_fields = {
+    'id':fields.Integer(default=None),
+    'numeroTelefono':fields.String(),
+    'numeroCertificado':fields.String(),
+    'montoCobro':fields.Float(),
+    'fechaHora':fields.DateTime(),
+    'motivo':fields.String()
+  }
+
+@swagger.model
+@swagger.nested(requests=SubscriptionCancellationOperationFields.__name__)
+class SubscriptionCancellationRequest:
+  """
+  """
+  resource_fields = {
+    'requests':fields.List(fields.Nested(SubscriptionCancellationOperationFields.resource_fields))
+  }
+
+# Responses
 
 @swagger.model
 class MetaFields:
@@ -138,13 +164,69 @@ class BaseResponseFields(object):
     self.errorMes***REMOVED***ge = errorMes***REMOVED***ge
     self.errorCode = errorCode
 
+@swagger.model
+@swagger.nested(payload=BaseResponseFields.__name__)
+class SubscriptionBillOperationsFields:
+  """
+    Every one of the operations received to be billed.
+  """
+  resource_fields = {
+    'id':fields.String(),
+    'payload':fields.Nested(BaseResponseFields.resource_fields)
+  }
+
+@swagger.model
+@swagger.nested(results=SubscriptionBillOperationsFields.__name__)
+class SubscriptionBillResourceFields:
+  """
+    The list of batch operations that were evaluated as 
+    billing requests.
+  """
+  resource_fields = {
+    'results':fields.List(fields.Nested(SubscriptionBillOperationsFields.resource_fields))
+  }
+
+@swagger.model
+@swagger.nested(payload=BaseResponseFields.__name__)
+class SubscriptionCancellationOperationsFields:
+  """
+    Every one of the operations received to be cancelled.
+  """
+  resource_fields = {
+    'id':fields.String(),
+    'payload':fields.Nested(BaseResponseFields.resource_fields)
+  }
+
+@swagger.model
+@swagger.nested(results=SubscriptionCancellationOperationsFields.__name__)
+class SubscriptionCancellationResourceFields:
+  """
+    The list of batch operations that were evaluated as 
+    cancelation requests.
+  """
+  resource_fields = {
+    'results':fields.List(fields.Nested(SubscriptionCancellationOperationsFields.resource_fields))
+  }
+
+@swagger.model
+class SubscriptionStatusResourceFields:
+  """
+    Properties of the response when 
+    querying the current status of a 
+    subscription. 
+  """
+  resource_fields = {
+    'codigoReclamo':fields.String(),
+    'CUI':fields.String(),
+    'nombreCompleto':fields.String(),
+    'numeroCertificado':fields.String(),
+    'numeroTelefono':fields.String(),
+    'cobertura':fields.Float(),
+  }
+
+
 def wrap_response(response, status, headers):
   return make_response(json.dumps(marshal(response, BaseResponseFields.resource_fields)), status, headers)
-
-
-
-
-
 
 
   @swagger.operation(
