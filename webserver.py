@@ -229,10 +229,78 @@ def wrap_response(response, status, headers):
   return make_response(json.dumps(marshal(response, BaseResponseFields.resource_fields)), status, headers)
 
 
+class SubscriptionBilling(Resource):
   @swagger.operation(
-          }
+    notes="These endpoint can receive from one two many batch requests within the ***REMOVED***me payload. <br/> fechaHora represented in RFC822-formatted datetime string in UTC",
+    responseClass=SubscriptionBillResourceFields,
+    nickname='billSubscription',
+    # Parameters can be automatically extracted from URLs (e.g. <string:id>)
+    # but you could also override them here, or add other parameters.
+    parameters=[
+      {
+        "name": "request",
+        "description": "Billing batch request",
+        "required": True,
+        "allowMultiple": True,
+        "dataType": SubscriptionBillingRequest.__name__,
+        "paramType": "body"
+      },
+    ],
+    responseMes***REMOVED***ges=[
+      {
+        "code": 400,
+        "mes***REMOVED***ge":"""<pre>
+        {
+          "data": {
+            "results": [
+              {
+                "id": "0",
+                "payload": {
+                  "data": {
+                    "mes***REMOVED***ge":"Operación ingre***REMOVED***da éxito***REMOVED***mente."
+                  },
+                  "errorCode": null,
+                  "errorMes***REMOVED***ge": null
+                }
+              }
+            ]
           },
+          "errorCode": null,
+          "errorMes***REMOVED***ge": null,
+          "meta": {
+            "status": "fail"
           }
+        }</pre>"""
+      },
+      {
+        "code": 404,
+        "mes***REMOVED***ge":"""<pre>
+        {
+          "data": {
+            "mes***REMOVED***ge": "No existe certificado para este número.",
+            "code": "TF0001"
+          },
+          "errorCode": null,
+          "errorMes***REMOVED***ge": null,
+          "meta": {
+            "status": "fail"
+          }
+        }</pre>"""
+      },
+      {
+        "code": 500,
+        "mes***REMOVED***ge": """<pre>
+        {
+          "data": null,
+          "errorCode": "TE0001",
+          "errorMes***REMOVED***ge": "El servicio no está disponible en este momento.",
+          "meta": {
+            "status": "error"
+          }
+        }</pre>"""
+      }
+    ]
+  )
 
   def put(self):
     """
