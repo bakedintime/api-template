@@ -9,8 +9,9 @@ app = Flask(__name__, static_url_path='/api/docs')
 api = swagger.docs(Api(app), apiVersion='0.1.0',
                    basePath='http://localhost:5000',
                    resourcePath='/',
-                   produces=["application/json", "text/html"],
+                   produces=["application/json"],
                    api_spec_url='/api/specs')
+
 
 TODOS = {
     'todo1': {'task': 'build an API'},
