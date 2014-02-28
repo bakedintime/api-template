@@ -131,6 +131,8 @@ class BaseResponseFields(object):
     self.errorMes***REMOVED***ge = errorMes***REMOVED***ge
     self.errorCode = errorCode
 
+def wrap_response(response, status, headers):
+  return make_response(json.dumps(marshal(response, BaseResponseFields.resource_fields)), status, headers)
 
 class Todo(Resource):
   "My TODO API"
