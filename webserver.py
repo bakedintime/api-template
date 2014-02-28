@@ -214,6 +214,152 @@ class TodoList(Resource):
     TODOS[todo_id] = {'task': args['task']}
     return TODOS[todo_id], 201
 
+class SubscriptionBilling(Resource):
+  def patch(self):
+    pass
+
+class SubscriptionCancellation(Resource):
+  def patch(self):
+    pass
+
+class SubscriptionStatus(Resource):
+  """
+    Subscription get status documentation
+  """
+
+  """" def __init__(self):
+    self.reqparse = reqparse.RequestParser()
+    self.reqparse.add_argument('numeroTelefono', type=str, required=True, help='No se ha proporcionado ningún número de teléfono', location='path')
+    super(SubscriptionStatus, self).__init__()"""
+
+  @swagger.operation(
+      notes="Inquiry on the status of a given telephone's subscription",
+      responseClass=SubscriptionStatusResourceFields,
+      description='Operations about things',
+      nickname='getStatus',
+      # Parameters can be automatically extracted from URLs (e.g. <string:id>)
+      # but you could also override them here, or add other parameters.
+      parameters=[
+        {
+          "name": "numeroTelefono",
+          "description": "Telephone number assigned to susbcription",
+          "required": True,
+          "allowMultiple": False,
+          "dataType": str.__name__,
+          "paramType": "path"
+        },
+      ],
+      responseMes***REMOVED***ges=[
+        {
+          "code": 400,
+          "mes***REMOVED***ge":"""<pre>
+          {
+            "data": {
+              "mes***REMOVED***ge": "No existe bloqueo de IMEI para este número.",
+              "code": "TF0003"
+            },
+            "errorCode": "null",
+            "errorMes***REMOVED***ge": "null",
+            "meta": {
+              "status": "fail"
+            }
+          }</pre>"""
+        },
+        {
+          "code": 400,
+          "mes***REMOVED***ge":"""<pre>
+          {
+            "data": {
+              "mes***REMOVED***ge": "Fecha de bloqueo no procede.",
+              "code": "TF0002"
+            },
+            "errorCode": "null",
+            "errorMes***REMOVED***ge": "null",
+            "meta": {
+              "status": "fail"
+            }
+          }</pre>"""
+        },
+        {
+          "code": 404,
+          "mes***REMOVED***ge":"""<pre>
+          {
+            "data": {
+              "mes***REMOVED***ge": "No existe certificado para este número.",
+              "code": "TF0001"
+            },
+            "errorCode": "null",
+            "errorMes***REMOVED***ge": "null",
+            "meta": {
+              "status": "fail"
+            }
+          }</pre>"""
+        },
+        {
+          "code": 500,
+          "mes***REMOVED***ge": """<pre>
+          {
+            "data": "null",
+            "errorCode": "TE0001",
+            "errorMes***REMOVED***ge": "El servicio no está disponible en este momento.",
+            "meta": {
+              "status": "error"
+            }
+          }</pre>"""
+        }
+      ]
+    )
+  def get(self, numeroTelefono):
+    """
+      Get the status of subcription of a telephone number.
+    """ 
+    choice = random.randint(1,10)
+    if ( 1 <= choice < 4 ):
+      response = BaseResponseFields(
+        status='success',
+        data={
+          'numeroCertificado':'A15324',
+          'numeroTelefono':'54612348',
+          'nombreCompleto':'José Ordoñez',
+          'CUI':'251061534862',
+          'codigoReclamo':'3252',
+          'cobertura':'2000.00'
+        }
+      )
+      status = 200
+    elif (4 <= choice < 7):
+      response = BaseResponseFields(
+        status='fail',
+        data={
+          'code':'TF0001',
+          'mes***REMOVED***ge':u'No existe certificado para este número.',
+        }
+      )
+      status = 404
+    elif (7 <= choice < 8):
+      response = BaseResponseFields(
+        status='fail',
+        data={
+          'code':'TF0002',
+          'mes***REMOVED***ge':u'Fecha de bloqueo no procede.',
+        }
+      )
+      status = 400  
+    else:
+      response = BaseResponseFields(
+        status='error',
+        data=None,
+        errorMes***REMOVED***ge=u'El servicio no está disponible en este momento.',
+        errorCode='TE0001'
+      )
+      status = 500
+    return wrap_response(response, status, {'Content-Type':'application/json'})
+
+
+class SubscriptionClaim(Resource):
+  def patch(self):
+    pass
+
 api.add_resource(SubscriptionBilling, '/subscriptions/charge', endpoint='chargeSubscription')
 api.add_resource(SubscriptionCancellation, '/subscriptions/cancel', endpoint='cancelSubscription')
 api.add_resource(SubscriptionStatus,  '/subscriptions/status/<string:numeroTelefono>', endpoint='getStatus')
@@ -228,7 +374,7 @@ def after(response):
     response.headers.add('Access-Control-Allow-Headers',
                          'Content-Type, X-Requested-With')
     response.headers.add('Access-Control-Max-Age', '1728000')
-
+    
     return response
 
 @app.route('/api/docs/')
