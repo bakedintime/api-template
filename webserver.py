@@ -224,8 +224,11 @@ class TodoList(Resource):
     TODOS[todo_id] = {'task': args['task']}
     return TODOS[todo_id], 201
 
-class SubscriptionBilling(Resource):
-  def patch(self):
+  def put(self):
+    """
+      Evaluate one or more bill requests to be 
+      charged to the given subscription.
+    """
     pass
 
 class SubscriptionCancellation(Resource):
@@ -367,7 +370,7 @@ class SubscriptionStatus(Resource):
 
 
 class SubscriptionClaim(Resource):
-  def patch(self):
+  def put(self):
     pass
 
 api.add_resource(SubscriptionBilling, '/subscriptions/charge', endpoint='chargeSubscription')
