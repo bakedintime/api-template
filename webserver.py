@@ -403,7 +403,6 @@ class SubscriptionStatus(Resource):
   @swagger.operation(
       notes="Inquiry on the status of a given telephone's subscription",
       responseClass=SubscriptionStatusResourceFields,
-      description='Operations about things',
       nickname='getStatus',
       # Parameters can be automatically extracted from URLs (e.g. <string:id>)
       # but you could also override them here, or add other parameters.
@@ -426,8 +425,8 @@ class SubscriptionStatus(Resource):
               "mes***REMOVED***ge": "No existe bloqueo de IMEI para este número.",
               "code": "TF0003"
             },
-            "errorCode": "null",
-            "errorMes***REMOVED***ge": "null",
+            "errorCode": null,
+            "errorMes***REMOVED***ge": null,
             "meta": {
               "status": "fail"
             }
@@ -441,8 +440,8 @@ class SubscriptionStatus(Resource):
               "mes***REMOVED***ge": "Fecha de bloqueo no procede.",
               "code": "TF0002"
             },
-            "errorCode": "null",
-            "errorMes***REMOVED***ge": "null",
+            "errorCode": null,
+            "errorMes***REMOVED***ge": null,
             "meta": {
               "status": "fail"
             }
@@ -456,8 +455,8 @@ class SubscriptionStatus(Resource):
               "mes***REMOVED***ge": "No existe certificado para este número.",
               "code": "TF0001"
             },
-            "errorCode": "null",
-            "errorMes***REMOVED***ge": "null",
+            "errorCode": null,
+            "errorMes***REMOVED***ge": null,
             "meta": {
               "status": "fail"
             }
@@ -467,7 +466,7 @@ class SubscriptionStatus(Resource):
           "code": 500,
           "mes***REMOVED***ge": """<pre>
           {
-            "data": "null",
+            "data": null,
             "errorCode": "TE0001",
             "errorMes***REMOVED***ge": "El servicio no está disponible en este momento.",
             "meta": {
