@@ -24,7 +24,14 @@
       supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
       onComplete: function(swaggerApi, swaggerUi){
         log("Loaded SwaggerUI")
+        var api_info = '<div class="info_title">Seguros API © TIR, S.A.</div>\
+          <div class="info_description">This is a ***REMOVED***mple server Petstore server.  You can find out more about Swagger \
+            at <a href="http://swagger.wordnik.com">http://swagger.wordnik.com</a> or on irc.freenode.net, #swagger.  For this ***REMOVED***mple,\
+            you can use the api key "special-key" to test the authorization filters\
+          </div>'
         $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
+        // Hack for displaying the info. It should be contained on the api json. 
+        $('#swagger-ui-container').prepend('<div class=​"info" id=​"api_info">​ '+api_info+' </div>​');
       },
       onFailure: function(data) {
         log("Unable to Load SwaggerUI");
