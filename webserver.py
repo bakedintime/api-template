@@ -295,12 +295,54 @@ class SubscriptionBilling(Resource):
     ]
   )
 
-  def put(self):
+  def post(self):
     """
       Evaluate one or more bill requests to be 
       charged to the given subscription.
     """
-    pass
+    args = request.json
+    print args
+    choice = random.randint(1,10)
+    if ( 1 <= choice < 4 ):
+      response = BaseResponseFields(
+        status='success',
+        data={
+          'numeroCertificado':'A15324',
+          'numeroTelefono':'54612348',
+          'nombreCompleto':'José Ordoñez',
+          'CUI':'251061534862',
+          'codigoReclamo':'3252',
+          'cobertura':'2000.00'
+        }
+      )
+      status = 200
+    elif (4 <= choice < 7):
+      response = BaseResponseFields(
+        status='fail',
+        data={
+          'code':'TF0001',
+          'mes***REMOVED***ge':u'No existe certificado para este número.',
+        }
+      )
+      status = 404
+    elif (7 <= choice < 8):
+      response = BaseResponseFields(
+        status='fail',
+        data={
+          'code':'TF0002',
+          'mes***REMOVED***ge':u'Fecha de bloqueo no procede.',
+        }
+      )
+      status = 400  
+    else:
+      response = BaseResponseFields(
+        status='error',
+        data=None,
+        errorMes***REMOVED***ge=u'El servicio no está disponible en este momento.',
+        errorCode='TE0001'
+      )
+      status = 500
+    return wrap_response(response, status, {'Content-Type':'application/json'})
 
 class SubscriptionCancellation(Resource):
   """
@@ -376,14 +418,56 @@ class SubscriptionCancellation(Resource):
       }
     ]
   )
-  def put(self):
+  def post(self):
     """
       Evaluate one or more cancel requests to be 
       issued to the given subscription.
       args = parser.parse_args()
     
     """
-    pass
+    args = request.json
+    print args
+    choice = random.randint(1,10)
+    if ( 1 <= choice < 4 ):
+      response = BaseResponseFields(
+        status='success',
+        data={
+          'numeroCertificado':'A15324',
+          'numeroTelefono':'54612348',
+          'nombreCompleto':'José Ordoñez',
+          'CUI':'251061534862',
+          'codigoReclamo':'3252',
+          'cobertura':'2000.00'
+        }
+      )
+      status = 200
+    elif (4 <= choice < 7):
+      response = BaseResponseFields(
+        status='fail',
+        data={
+          'code':'TF0001',
+          'mes***REMOVED***ge':u'No existe certificado para este número.',
+        }
+      )
+      status = 404
+    elif (7 <= choice < 8):
+      response = BaseResponseFields(
+        status='fail',
+        data={
+          'code':'TF0002',
+          'mes***REMOVED***ge':u'Fecha de bloqueo no procede.',
+        }
+      )
+      status = 400  
+    else:
+      response = BaseResponseFields(
+        status='error',
+        data=None,
+        errorMes***REMOVED***ge=u'El servicio no está disponible en este momento.',
+        errorCode='TE0001'
+      )
+      status = 500
+    return wrap_response(response, status, {'Content-Type':'application/json'})
 
 class SubscriptionStatus(Resource):
   """
@@ -509,10 +593,89 @@ class SubscriptionStatus(Resource):
       status = 500
     return wrap_response(response, status, {'Content-Type':'application/json'})
 
-
 class SubscriptionClaim(Resource):
-  def put(self):
-    pass
+  """
+  """
+  def __init__(self):
+    self.reqparse = reqparse.RequestParser()
+    self.reqparse.add_argument('codigoReclamo', type=str, required=True, help='No se ha proporcionado ningún código de reclamo.')
+    super(SubscriptionClaim, self).__init__()
+
+  @swagger.operation(
+      notes="Claim a subscription.",
+      responseClass=SubscriptionClaimResponse,
+      nickname='claimSubscription',
+      parameters=[
+        {
+          "name": "request",
+          "description": "Claim subscription request.",
+          "required": True,
+          "allowMultiple": False,
+          "dataType": SubscriptionClaimRequest.__name__,
+          "paramType": "body"
+        },
+      ],
+      responseMes***REMOVED***ges=[
+        {
+          "code": 404,
+          "mes***REMOVED***ge":"""<pre>
+          {
+            "data": {
+              "mes***REMOVED***ge": "No existe código de reclamo.",
+              "code": "TF0001"
+            },
+            "errorCode": null,
+            "errorMes***REMOVED***ge": null,
+            "meta": {
+              "status": "fail"
+            }
+          }</pre>"""
+        },
+        {
+          "code": 500,
+          "mes***REMOVED***ge": """<pre>
+          {
+            "data": null,
+            "errorCode": "TE0001",
+            "errorMes***REMOVED***ge": "El servicio no está disponible en este momento.",
+            "meta": {
+              "status": "error"
+            }
+          }</pre>"""
+        }
+      ]
+    )
+  def post(self):
+    """ Claim a subscription """
+    args = self.reqparse.parse_args()
+    choice = random.randint(1,10)
+    if ( 1 <= choice < 5 ):
+      response = BaseResponseFields(
+        status='success',
+        data={
+          'cobertura':'2000.00'
+        }
+      )
+      status = 200
+    elif (6 <= choice < 8):
+      response = BaseResponseFields(
+        status='fail',
+        data={
+          'code':'TF0002',
+          'mes***REMOVED***ge':u'El código de reclamo no existe.',
+        }
+      )
+      status = 400  
+    else:
+      response = BaseResponseFields(
+        status='error',
+        data=None,
+        errorMes***REMOVED***ge=u'El servicio no está disponible en este momento.',
+        errorCode='TE0001'
+      )
+      status = 500
+    return wrap_response(response, status, {'Content-Type':'application/json'})
+
 class SubscriptionChangeNumber(Resource):
   """
   """
