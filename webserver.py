@@ -214,8 +214,13 @@ class SubscriptionChangeNumberResponse:
   }
 
 def wrap_response(response, status, headers):
+  """
+    Receives all responses and adds status codes and headers
+    when filtered with marshal
+  """
   return make_response(json.dumps(marshal(response, BaseResponseFields.resource_fields)), status, headers)
 
+# Endpoints declaration
 
 class SubscriptionBilling(Resource):
   @swagger.operation(
@@ -298,6 +303,8 @@ class SubscriptionBilling(Resource):
     pass
 
 class SubscriptionCancellation(Resource):
+  """
+  """
   @swagger.operation(
     notes="These endpoint can receive from one two many batch requests within the ***REMOVED***me payload. <br/> fechaHora represented in RFC822-formatted datetime string in UTC",
     responseClass=SubscriptionCancellationResourceFields,
@@ -306,7 +313,7 @@ class SubscriptionCancellation(Resource):
     # but you could also override them here, or add other parameters.
     parameters=[
       {
-        "name": "request",
+        "name": "requests",
         "description": "Cancelation batch request",
         "required": True,
         "allowMultiple": True,
@@ -382,18 +389,10 @@ class SubscriptionStatus(Resource):
   """
     Subscription get status documentation
   """
-
-  """" def __init__(self):
-    self.reqparse = reqparse.RequestParser()
-    self.reqparse.add_argument('numeroTelefono', type=str, required=True, help='No se ha proporcionado ningún número de teléfono', location='path')
-    super(SubscriptionStatus, self).__init__()"""
-
   @swagger.operation(
       notes="Inquiry on the status of a given telephone's subscription",
       responseClass=SubscriptionStatusResourceFields,
       nickname='getStatus',
-      # Parameters can be automatically extracted from URLs (e.g. <string:id>)
-      # but you could also override them here, or add other parameters.
       parameters=[
         {
           "name": "numeroTelefono",
