@@ -6,6 +6,24 @@ from flask_swagger.flask_restful_swagger import swagger
 
 app = Flask(__name__, static_url_path='/api/docs')
 
+apiDescription = """<p>Descripción del API para gestión de seguros. <br/> Todas las respuestas se envían con el formato: </p>
+  <pre>
+  {
+      'data': {},
+      'errorCode': 'codigo',
+      'errorMes***REMOVED***ge': 'men***REMOVED***je de error',
+      'meta': {'status': 'success'} 
+  }
+  </pre>
+  <br/>
+  <p>
+      Los campos <b>data</b>, <b>codigo</b> y <b>men***REMOVED***je</b> son opcionales y dependen del <b>status</b> recibido en el header <b>meta</b>
+  </p>
+  <p>
+    <em>powered by <a href="swagger.wordnik.com">Swagger</a> </em>
+  </p>
+  """
+
 # Swagger generator wrapper
 api = swagger.docs(Api(app), apiVersion='0.1.0',
                    basePath='http://localhost:5000',
@@ -14,8 +32,8 @@ api = swagger.docs(Api(app), apiVersion='0.1.0',
                    api_spec_url='/api/specs',
                    info=dict(
                     title="Seguros API © Grupo TIR, S.A.",
-                    description="This is a ***REMOVED***mple server Petstore server.  You can find out more about Swagger \n    at <a href=\"http://swagger.wordnik.com\">http://swagger.wordnik.com</a> or on irc.freenode.net, #swagger.  For this ***REMOVED***mple,\n    you can use the api key \"special-key\" to test the authorization filters",
-                    contact="apiteam@tir.com.gt",
+                    description=apiDescription,
+                    contact="jdigherob@tir.com.gt",
                   ))
 
 
