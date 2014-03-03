@@ -16,68 +16,8 @@ api = swagger.docs(Api(app), apiVersion='0.1.0',
                     title="Seguros API © Grupo TIR, S.A.",
                     description="This is a ***REMOVED***mple server Petstore server.  You can find out more about Swagger \n    at <a href=\"http://swagger.wordnik.com\">http://swagger.wordnik.com</a> or on irc.freenode.net, #swagger.  For this ***REMOVED***mple,\n    you can use the api key \"special-key\" to test the authorization filters",
                     contact="apiteam@tir.com.gt",
-                    license="Apache 2.0",
-                    licenseUrl="http://www.apache.org/licenses/LICENSE-2.0.html"
                   ))
 
-
-TODOS = {
-    'todo1': {'task': 'build an API'},
-    'todo2': {'task': '?????'},
-    'todo3': {'task': 'profit!'},
-}
-
-
-def abort_if_todo_doesnt_exist(todo_id):
-  if todo_id not in TODOS:
-    abort(404, mes***REMOVED***ge="Todo {} doesn't exist".format(todo_id))
-
-parser = reqparse.RequestParser()
-parser.add_argument('task', type=str)
-
-
-@swagger.model
-class TodoItem:
-  """This is an example of a model class that has parameters in its constructor
-  and the fields in the swagger spec are derived from the parameters
-  to __init__.
-  In this case we would have args, arg2 as required parameters and arg3 as
-  optional parameter."""
-  def __init__(self, arg1, arg2, arg3='123'):
-    pass
-
-
-@swagger.model
-class ModelWithResourceFields:
-  resource_fields = {
-      'a_string': fields.String()
-  }
-
-@swagger.model
-@swagger.nested(
-   a_nested_attribute=ModelWithResourceFields.__name__,
-   a_list_of_nested_types=ModelWithResourceFields.__name__)
-class TodoItemWithResourceFields:
-  """This is an example of how Output Fields work
-  (http://flask-restful.readthedocs.org/en/latest/fields.html).
-  Output Fields lets you add resource_fields to your model in which you specify
-  the output of the model when it gets sent as an HTTP response.
-  flask-restful-swagger takes advantage of this to specify the fields in
-  the model"""
-  resource_fields = {
-      'a_string': fields.String(attribute='a_string_field_name'),
-      'a_formatted_string': fields.FormattedString,
-      'an_int': fields.Integer,
-      'a_bool': fields.Boolean,
-      'a_url': fields.Url,
-      'a_float': fields.Float,
-      'an_float_with_arbitrary_precision': fields.Arbitrary,
-      'a_fixed_point_decimal': fields.Fixed,
-      'a_datetime': fields.DateTime,
-      'a_list_of_strings': fields.List(fields.String),
-      'a_nested_attribute': fields.Nested(ModelWithResourceFields.resource_fields),
-      'a_list_of_nested_types': fields.List(fields.Nested(ModelWithResourceFields.resource_fields)),
-  }
 
 ############################
 #####  Swagger models ######
@@ -550,6 +490,4 @@ def api_webdocs():
   return redirect('/api/docs/index.html')
 
 if __name__ == '__main__':
-  TodoItemWithResourceFields()
-  TodoItem(1, 2, '3')
   app.run(debug=True)
