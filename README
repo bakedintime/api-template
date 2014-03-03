@@ -21,12 +21,17 @@ both folder path (c:\Python27) and Scripts folder (c:\Python27\Scripts).
     cd segurosAPI
     ..\venv\Scripts\activate
 
+7. if not present, install git
+
 From within virtual environment
 
-7. Install requirements:
+8. Clone repository:
+    git clone git@git.tir:seguros/seguro***REMOVED***pi.git
+
+9. Install requirements:
     pip install -r requirements.txt
 
-8. Run server:
+10. Run server:
     python webserver.py
 
 Troubleshooting
