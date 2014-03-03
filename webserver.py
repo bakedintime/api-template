@@ -83,6 +83,19 @@ class SubscriptionCancellationRequest:
     'requests':fields.List(fields.Nested(SubscriptionCancellationOperationFields.resource_fields))
   }
 
+@swagger.model
+class SubscriptionClaimRequest:
+  resource_fields = {
+    'codigoReclamo':fields.String()
+  }
+
+@swagger.model
+class SubscriptionChangeNumberRequest:
+  resource_fields = {
+    'IMEI':fields.String(),
+    'numeroTelefono':fields.String()
+  }
+
 # Responses
 
 @swagger.model
@@ -182,6 +195,23 @@ class SubscriptionStatusResourceFields:
     'cobertura':fields.Float(),
   }
 
+@swagger.model
+class SubscriptionClaimResponse:
+  """
+    Properties of the response when 
+    claiming a subscription.
+  """
+  resource_fields = {
+    'cobertura':fields.Float(),
+  }
+
+@swagger.model
+class SubscriptionChangeNumberResponse:
+  """
+  """
+  resource_fields = {
+    'mes***REMOVED***ge':fields.String()
+  }
 
 def wrap_response(response, status, headers):
   return make_response(json.dumps(marshal(response, BaseResponseFields.resource_fields)), status, headers)
@@ -484,12 +514,115 @@ class SubscriptionStatus(Resource):
 class SubscriptionClaim(Resource):
   def put(self):
     pass
+class SubscriptionChangeNumber(Resource):
+  """
+  """
+  def __init__(self):
+    self.reqparse = reqparse.RequestParser()
+    self.reqparse.add_argument('IMEI', type=str, required=True, help='No se ha proporcionado el valor para el IMEI.')
+    self.reqparse.add_argument('numeroTelefono', type=str, required=True, help='No se ha proporcionado un número de teléfono válido.')
+    super(SubscriptionChangeNumber, self).__init__()
 
+  @swagger.operation(
+      notes="Update IMEI assigned to a number.",
+      responseClass=SubscriptionChangeNumberResponse,
+      nickname='changeNumber',
+      parameters=[
+        {
+          "name": "request",
+          "description": "Change Number request",
+          "required": True,
+          "allowMultiple": False,
+          "dataType": SubscriptionChangeNumberRequest.__name__,
+          "paramType": "body"
+        },
+      ],
+      responseMes***REMOVED***ges=[
+        {
+          "code": 400,
+          "mes***REMOVED***ge":"""<pre>
+          {
+            "data": {
+              "mes***REMOVED***ge": "No existe bloqueo de IMEI para este número.",
+              "code": "TF0003"
+            },
+            "errorCode": null,
+            "errorMes***REMOVED***ge": null,
+            "meta": {
+              "status": "fail"
+            }
+          }</pre>"""
+        },
+        {
+          "code": 404,
+          "mes***REMOVED***ge":"""<pre>
+          {
+            "data": {
+              "mes***REMOVED***ge": "Este número no existe.",
+              "code": "TF0001"
+            },
+            "errorCode": null,
+            "errorMes***REMOVED***ge": null,
+            "meta": {
+              "status": "fail"
+            }
+          }</pre>"""
+        },
+        {
+          "code": 500,
+          "mes***REMOVED***ge": """<pre>
+          {
+            "data": null,
+            "errorCode": "TE0001",
+            "errorMes***REMOVED***ge": "El servicio no está disponible en este momento.",
+            "meta": {
+              "status": "error"
+            }
+          }</pre>"""
+        }
+      ]
+    )
+  def post():
+    """
+      Change number assigned to IMEI.
+    """
+    args = self.reqparse.parse_args()
+    choice = random.randint(1,10)
+    if ( 1 <= choice < 4 ):
+      response = BaseResponseFields(
+        status='success',
+        data={
+          'mes***REMOVED***ge':'Datos actualizados éxito***REMOVED***mente',
+        }
+      )
+      status = 200
+    elif (4 <= choice < 7):
+      response = BaseResponseFields(
+        status='fail',
+        data={
+          'code':'TF0001',
+          'mes***REMOVED***ge':u'El número de teléfono no existe.',
+        }
+      )
+      status = 404
+    else:
+      response = BaseResponseFields(
+        status='error',
+        data=None,
+        errorMes***REMOVED***ge=u'El servicio no está disponible en este momento.',
+        errorCode='TE0001'
+      )
+      status = 500
+    return wrap_response(response, status, {'Content-Type':'application/json'})
+
+# Api description
 api.add_resource(SubscriptionBilling, '/subscriptions/charge', endpoint='chargeSubscription')
 api.add_resource(SubscriptionCancellation, '/subscriptions/cancel', endpoint='cancelSubscription')
-api.add_resource(SubscriptionStatus,  '/subscriptions/status/<string:numeroTelefono>', endpoint='getStatus')
-api.add_resource(SubscriptionClaim, '/subscriptions/claim', endpoint='ClaimSubscription')
+api.add_resource(SubscriptionStatus,  '/subscription/<string:numeroTelefono>/status/', endpoint='getStatus')
+api.add_resource(SubscriptionClaim, '/subscription/claim', endpoint='ClaimSubscription')
+api.add_resource(SubscriptionChangeNumber, '/subscription/changeNumber', endpoint='ChangeNumber')
 
+# App routing
 
 @app.after_request
 def after(response):
