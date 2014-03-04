@@ -46,7 +46,7 @@ api = swagger.docs(Api(app), apiVersion='0.1.0',
 
 # Requests
 @swagger.model
-class SubscriptionBillingOperationFields:
+class SubscriptionBillingRequestFields:
   resource_fields = {
     'id':fields.Integer(default=None),
     'numeroTelefono':fields.String(),
@@ -56,16 +56,16 @@ class SubscriptionBillingOperationFields:
   }
 
 @swagger.model
-@swagger.nested(requests=SubscriptionBillingOperationFields.__name__)
+@swagger.nested(requests=SubscriptionBillingRequestFields.__name__)
 class SubscriptionBillingRequest:
   """
   """
   resource_fields = {
-    'requests':fields.List(fields.Nested(SubscriptionBillingOperationFields.resource_fields))
+    'requests':fields.List(fields.Nested(SubscriptionBillingRequestFields.resource_fields))
   }
 
 @swagger.model
-class SubscriptionCancellationOperationFields:
+class SubscriptionCancellationRequestFields:
   resource_fields = {
     'id':fields.Integer(default=None),
     'numeroTelefono':fields.String(),
@@ -76,12 +76,12 @@ class SubscriptionCancellationOperationFields:
   }
 
 @swagger.model
-@swagger.nested(requests=SubscriptionCancellationOperationFields.__name__)
+@swagger.nested(requests=SubscriptionCancellationRequestFields.__name__)
 class SubscriptionCancellationRequest:
   """
   """
   resource_fields = {
-    'requests':fields.List(fields.Nested(SubscriptionCancellationOperationFields.resource_fields))
+    'requests':fields.List(fields.Nested(SubscriptionCancellationRequestFields.resource_fields))
   }
 
 @swagger.model
@@ -149,7 +149,7 @@ class SubscriptionBillOperationsFields:
 
 @swagger.model
 @swagger.nested(results=SubscriptionBillOperationsFields.__name__)
-class SubscriptionBillResourceFields:
+class SubscriptionBillResponse:
   """
     The list of batch operations that were evaluated as 
     billing requests.
@@ -171,7 +171,7 @@ class SubscriptionCancellationOperationsFields:
 
 @swagger.model
 @swagger.nested(results=SubscriptionCancellationOperationsFields.__name__)
-class SubscriptionCancellationResourceFields:
+class SubscriptionCancellationResponse:
   """
     The list of batch operations that were evaluated as 
     cancelation requests.
@@ -181,7 +181,7 @@ class SubscriptionCancellationResourceFields:
   }
 
 @swagger.model
-class SubscriptionStatusResourceFields:
+class SubscriptionStatusResponse:
   """
     Properties of the response when 
     querying the current status of a 
@@ -226,7 +226,7 @@ def wrap_response(response, status, headers):
 class SubscriptionBilling(Resource):
   @swagger.operation(
     notes="These endpoint can receive from one two many batch requests within the ***REMOVED***me payload. <br/> fechaHora represented in RFC822-formatted datetime string in UTC",
-    responseClass=SubscriptionBillResourceFields,
+    responseClass=SubscriptionBillResponse,
     nickname='billSubscription',
     # Parameters can be automatically extracted from URLs (e.g. <string:id>)
     # but you could also override them here, or add other parameters.
@@ -350,7 +350,7 @@ class SubscriptionCancellation(Resource):
   """
   @swagger.operation(
     notes="These endpoint can receive from one two many batch requests within the ***REMOVED***me payload. <br/> fechaHora represented in RFC822-formatted datetime string in UTC",
-    responseClass=SubscriptionCancellationResourceFields,
+    responseClass=SubscriptionCancellationResponse,
     nickname='cancelSubscription',
     # Parameters can be automatically extracted from URLs (e.g. <string:id>)
     # but you could also override them here, or add other parameters.
@@ -476,7 +476,7 @@ class SubscriptionStatus(Resource):
   """
   @swagger.operation(
       notes="Inquiry on the status of a given telephone's subscription",
-      responseClass=SubscriptionStatusResourceFields,
+      responseClass=SubscriptionStatusResponse,
       nickname='getStatus',
       parameters=[
         {
