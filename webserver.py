@@ -6,7 +6,7 @@ from flask_swagger.flask_restful_swagger import swagger
 
 app = Flask(__name__, static_url_path='/api/docs')
 
-apiDescription = """<p>Descripción del API para gestión de seguros. <br/> Todas las respuestas se envían con el formato: </p>
+apiDescription = """<p>REST API description of insurance management. <br/> All responses abide to the format: </p>
   <pre>
   {
       'data': {},
@@ -17,7 +17,8 @@ apiDescription = """<p>Descripción del API para gestión de seguros. <br/> Toda
   </pre>
   <br/>
   <p>
-      Los campos <b>data</b>, <b>codigo</b> y <b>men***REMOVED***je</b> son opcionales y dependen del <b>status</b> recibido en el header <b>meta</b>
+    The field <b>data</b> is replaced in every endpoint by its respective response.
+    Fields <b>data</b>, <b>errorCode</b> and <b>errorMes***REMOVED***ge</b> are optional and rely on the <b>status</b> in the header <b>meta</b>
   </p>
   <p>
     <em>powered by <a href="swagger.wordnik.com">Swagger</a> </em>
