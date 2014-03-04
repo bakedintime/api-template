@@ -423,8 +423,6 @@ class SubscriptionCancellation(Resource):
     """
       Evaluate one or more cancel requests to be 
       issued to the given subscription.
-      args = parser.parse_args()
-    
     """
     args = request.json
     print args
