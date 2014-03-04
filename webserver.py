@@ -214,11 +214,10 @@ def wrap_response(response, status, headers):
 
 class SubscriptionBilling(Resource):
   @swagger.operation(
-    notes="These endpoint can receive from one two many batch requests within the ***REMOVED***me payload. <br/> fechaHora represented in RFC822-formatted datetime string in UTC",
+    notes="These endpoint can receive from one two many batch requests within the ***REMOVED***me payload. <br/> fechaHora represented in RFC822-formatted datetime string in UTC. " \
+          "<br/><br/><b>Note:</b> The field <b>id</b> in the response and request of batch operations is only used for mapping the result of each individual tran***REMOVED***ction. When there is only one tran***REMOVED***ction this field is optional.",
     responseClass=SubscriptionBillResponse,
     nickname='billSubscription',
-    # Parameters can be automatically extracted from URLs (e.g. <string:id>)
-    # but you could also override them here, or add other parameters.
     parameters=[
       {
         "name": "request",
@@ -383,7 +382,8 @@ class SubscriptionCancellation(Resource):
   """
   """
   @swagger.operation(
-    notes="These endpoint can receive from one two many batch requests within the ***REMOVED***me payload. <br/> fechaHora represented in RFC822-formatted datetime string in UTC",
+    notes="These endpoint can receive from one two many batch requests within the ***REMOVED***me payload. <br/> fechaHora represented in RFC822-formatted datetime string in UTC."  \
+          "<br/><br/><b>Note:</b> The field <b>id</b> in the response and request of batch operations is only used for mapping the result of each individual tran***REMOVED***ction. When there is only one tran***REMOVED***ction this field is optional.",
     responseClass=SubscriptionCancellationResponse,
     nickname='cancelSubscription',
     # Parameters can be automatically extracted from URLs (e.g. <string:id>)
