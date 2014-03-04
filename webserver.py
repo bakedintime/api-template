@@ -124,6 +124,18 @@ class BaseResponseFields:
     'data':fields.Raw
   }
 
+  def __init__(self, status, data, errorCode=None, errorMes***REMOVED***ge=None):
+    """
+      Base response constructor.
+      errorCode and errorMes***REMOVED***ge are only instatiated
+      when an error has ocurred.
+    """
+    self.meta = {}
+    self.meta['status'] = status
+    self.data = data
+    self.errorMes***REMOVED***ge = errorMes***REMOVED***ge
+    self.errorCode = errorCode
+
 
 @swagger.model
 @swagger.nested(payload=BaseResponseFields.__name__)
