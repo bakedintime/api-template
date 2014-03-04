@@ -297,12 +297,19 @@ class SubscriptionBilling(Resource):
       response = BaseResponseFields(
         status='success',
         data={
-          'numeroCertificado':'A15324',
-          'numeroTelefono':'54612348',
-          'nombreCompleto':'José Ordoñez',
-          'CUI':'251061534862',
-          'codigoReclamo':'3252',
-          'cobertura':'2000.00'
+          "results": [
+            {
+              "id": "0",
+              "payload": {
+                "data": {"mes***REMOVED***ge":"Subscription successfully billed."},
+                "errorCode": "null",
+                "errorMes***REMOVED***ge": "null",
+                "meta": {
+                  "status": "success"
+                }
+              }
+            }
+          ]
         }
       )
       status = 200
@@ -420,12 +427,19 @@ class SubscriptionCancellation(Resource):
       response = BaseResponseFields(
         status='success',
         data={
-          'numeroCertificado':'A15324',
-          'numeroTelefono':'54612348',
-          'nombreCompleto':'José Ordoñez',
-          'CUI':'251061534862',
-          'codigoReclamo':'3252',
-          'cobertura':'2000.00'
+          "results": [
+            {
+              "id": "0",
+              "payload": {
+                "data": {"mes***REMOVED***ge":"Subscription successfully cancelled."},
+                "errorCode": "null",
+                "errorMes***REMOVED***ge": "null",
+                "meta": {
+                  "status": "success"
+                }
+              }
+            }
+          ]
         }
       )
       status = 200
