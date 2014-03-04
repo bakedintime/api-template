@@ -744,7 +744,7 @@ class SubscriptionChangeNumber(Resource):
         }
       ]
     )
-  def post():
+  def post(self):
     """
       Change number assigned to IMEI.
     """
