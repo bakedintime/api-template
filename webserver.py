@@ -240,10 +240,13 @@ class SubscriptionBilling(Resource):
                 "id": "0",
                 "payload": {
                   "data": {
-                    "mes***REMOVED***ge":"Operación ingre***REMOVED***da éxito***REMOVED***mente."
+                    "mes***REMOVED***ge":"Validación de campos incorrecta."
                   },
                   "errorCode": null,
-                  "errorMes***REMOVED***ge": null
+                  "errorMes***REMOVED***ge": null,
+                  "meta": {
+                    "status": "fail"
+                  }
                 }
               }
             ]
@@ -251,7 +254,7 @@ class SubscriptionBilling(Resource):
           "errorCode": null,
           "errorMes***REMOVED***ge": null,
           "meta": {
-            "status": "fail"
+            "status": "success"
           }
         }</pre>"""
       },
@@ -260,13 +263,26 @@ class SubscriptionBilling(Resource):
         "mes***REMOVED***ge":"""<pre>
         {
           "data": {
-            "mes***REMOVED***ge": "No existe certificado para este número.",
-            "code": "TF0001"
+            "results": [
+              {
+                "id": "0",
+                "payload": {
+                  "data": {
+                    "mes***REMOVED***ge":"No existe certificado asignado a este número."
+                  },
+                  "errorCode": null,
+                  "errorMes***REMOVED***ge": null,
+                  "meta": {
+                    "status": "fail"
+                  }
+                }
+              }
+            ]
           },
           "errorCode": null,
           "errorMes***REMOVED***ge": null,
           "meta": {
-            "status": "fail"
+            "status": "success"
           }
         }</pre>"""
       },
@@ -315,19 +331,41 @@ class SubscriptionBilling(Resource):
       status = 200
     elif (4 <= choice < 7):
       response = BaseResponseFields(
-        status='fail',
+        status='success',
         data={
-          'code':'TF0001',
-          'mes***REMOVED***ge':u'No existe certificado para este número.',
+          "results": [
+            {
+              "id": "0",
+              "payload": {
+                "data": {"mes***REMOVED***ge":"No existe certificado para este número."},
+                "errorCode": "null",
+                "errorMes***REMOVED***ge": "null",
+                "meta": {
+                  "status": "fail"
+                }
+              }
+            }
+          ]
         }
       )
       status = 404
     elif (7 <= choice < 8):
       response = BaseResponseFields(
-        status='fail',
+        status='success',
         data={
-          'code':'TF0002',
-          'mes***REMOVED***ge':u'Fecha de bloqueo no procede.',
+          "results": [
+            {
+              "id": "0",
+              "payload": {
+                "data": {"mes***REMOVED***ge":"Fecha de bloqueo no procede."},
+                "errorCode": "null",
+                "errorMes***REMOVED***ge": "null",
+                "meta": {
+                  "status": "fail"
+                }
+              }
+            }
+          ]
         }
       )
       status = 400  
@@ -374,7 +412,10 @@ class SubscriptionCancellation(Resource):
                     "mes***REMOVED***ge":"Mótivo no definido."
                   },
                   "errorCode": null,
-                  "errorMes***REMOVED***ge": null
+                  "errorMes***REMOVED***ge": null,
+                  "meta": {
+                    "status": "fail"
+                  }
                 }
               }
             ]
@@ -382,7 +423,7 @@ class SubscriptionCancellation(Resource):
           "errorCode": null,
           "errorMes***REMOVED***ge": null,
           "meta": {
-            "status": "fail"
+            "status": "success"
           }
         }</pre>"""
       },
@@ -391,13 +432,26 @@ class SubscriptionCancellation(Resource):
         "mes***REMOVED***ge":"""<pre>
         {
           "data": {
-            "mes***REMOVED***ge": "No existe certificado para este número.",
-            "code": "TF0001"
+            "results": [
+              {
+                "id": "0",
+                "payload": {
+                  "data": {
+                    "mes***REMOVED***ge":"No existe certificado para este número."
+                  },
+                  "errorCode": null,
+                  "errorMes***REMOVED***ge": null,
+                  "meta": {
+                    "status": "fail"
+                  }
+                }
+              }
+            ]
           },
           "errorCode": null,
           "errorMes***REMOVED***ge": null,
           "meta": {
-            "status": "fail"
+            "status": "success"
           }
         }</pre>"""
       },
@@ -445,10 +499,23 @@ class SubscriptionCancellation(Resource):
       status = 200
     elif (4 <= choice < 7):
       response = BaseResponseFields(
-        status='fail',
+        status='success',
         data={
-          'code':'TF0001',
-          'mes***REMOVED***ge':u'No existe certificado para este número.',
+          "results": [
+            {
+              "id": "0",
+              "payload": {
+                "data": {
+                  "mes***REMOVED***ge":"Mótivo no definido."
+                },
+                "errorCode": "null",
+                "errorMes***REMOVED***ge": "null",
+                "meta": {
+                  "status": "fail"
+                }
+              }
+            }
+          ]
         }
       )
       status = 404
@@ -456,8 +523,21 @@ class SubscriptionCancellation(Resource):
       response = BaseResponseFields(
         status='fail',
         data={
-          'code':'TF0002',
-          'mes***REMOVED***ge':u'Fecha de bloqueo no procede.',
+          "results": [
+            {
+              "id": "0",
+              "payload": {
+                "data": {
+                  "mes***REMOVED***ge":"Fecha de bloqueo no procede."
+                },
+                "errorCode": "null",
+                "errorMes***REMOVED***ge": "null",
+                "meta": {
+                  "status": "fail"
+                }
+              }
+            }
+          ]
         }
       )
       status = 400  
