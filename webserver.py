@@ -37,6 +37,7 @@ apiDescription = """<p>REST API description of insurance management. <br/> All r
     <input placeholder="Username" id="input_username" name="username" type="text"/>
     <input placeholder="Password" id="input_password" name="password" type="text"/>
     <button id="addHeader">Add Header</button>
+    <button id="verifyHeader">Verify Header</button>
   </form>
   <hr/>
   <p>
