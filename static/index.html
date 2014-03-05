@@ -39,6 +39,14 @@
         log("added key " + key);
         window.authorizations.add("key", new ApiKeyAuthorization("api_key", key, "query"));
       }
+    });
+    $(document).on('click', '#addHeader', function(){
+      log('executing this');
+      var username = $('#input_username')[0].value;
+      var password = $('#input_password')[0].value;
+      var encodedString = 'Basic '+ btoa(username + ':' + password);
+      window.authorizations.add("basicAuth", new ApiKeyAuthorization("Authorization", encodedString, "header"));
+      return false;
     })
     window.swaggerUi.load();
   });

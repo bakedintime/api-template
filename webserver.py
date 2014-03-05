@@ -27,6 +27,19 @@ apiDescription = """<p>REST API description of insurance management. <br/> All r
     Fields <b>data</b>, <b>errorCode</b> and <b>errorMes***REMOVED***ge</b> are optional and rely on the <b>status</b> in the header <b>meta</b>
   </p>
   <p>
+    The API relies on Basic Authentication via Request Headers descibed as:
+      <pre>Authorization: Basic encodedString</pre>
+      <br/>
+    where encodedString represents the 64 base encoding of the concatenation of "username:password". All endpoints must receive this header
+    To set this header to test the endpoints in this api use the following inputs:
+  </p>
+  <form class='basic_auth_info'>
+    <input placeholder="Username" id="input_username" name="username" type="text"/>
+    <input placeholder="Password" id="input_password" name="password" type="text"/>
+    <button id="addHeader">Add Header</button>
+  </form>
+  <hr/>
+  <p>
     <em>powered by <a href="swagger.wordnik.com">Swagger</a> </em>
   </p>
   """
