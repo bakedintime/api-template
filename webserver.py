@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import random
+import random, hashlib
 from flask import Flask, redirect, make_response, json
 from flask.ext.restful import reqparse, request, Api, Resource, fields, marshal
 from flask_swagger.flask_restful_swagger import swagger
@@ -52,6 +52,10 @@ def get_pw(username):
     return users[username]
   return None
 
+
+@auth.hash_password
+def hash_pw(password):
+  return hashlib.md5(password).hexdigest()
 
 @auth.error_handler
 def auth_error():
