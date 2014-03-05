@@ -3,8 +3,14 @@ import random
 from flask import Flask, redirect, make_response, json
 from flask.ext.restful import reqparse, request, Api, Resource, fields, marshal
 from flask_swagger.flask_restful_swagger import swagger
+from flask.ext.httpauth import HTTPBasicAuth
 
 app = Flask(__name__, static_url_path='/api/docs')
+auth = HTTPBasicAuth()
+
+users = {
+  'tigo':'94c6c2243936b5472836ac7077830f5e' #t3$tus3r
+}
 
 apiDescription = """<p>REST API description of insurance management. <br/> All responses abide to the format: </p>
   <pre>
@@ -37,6 +43,25 @@ api = swagger.docs(Api(app), apiVersion='0.1.0',
                     contact="jdigherob@tir.com.gt",
                   ))
 
+
+# Authentication Functions
+
+@auth.get_password
+def get_pw(username):
+  if username in users:
+    return users[username]
+  return None
+
+
+@auth.error_handler
+def auth_error():
+  response = BaseResponseFields(
+    status='error',
+    data=None,
+    errorMes***REMOVED***ge=u'Las credenciales no son válidas. Acceso denegado.',
+    errorCode='TE0002'
+  )
+  return wrap_response(response, 500, {'Content-Type':'application/json'})
 
 ############################
 #####  Swagger models ######
@@ -311,7 +336,7 @@ class SubscriptionBilling(Resource):
       }
     ]
   )
-
+  @auth.login_required
   def post(self):
     """
       Evaluate one or more bill requests to be 
@@ -481,6 +506,7 @@ class SubscriptionCancellation(Resource):
       }
     ]
   )
+  @auth.login_required
   def post(self):
     """
       Evaluate one or more cancel requests to be 
@@ -641,6 +667,7 @@ class SubscriptionStatus(Resource):
         }
       ]
     )
+  @auth.login_required
   def get(self, numeroTelefono):
     """
       Get the status of subcription of a telephone number.
@@ -739,6 +766,7 @@ class SubscriptionClaim(Resource):
         }
       ]
     )
+  @auth.login_required
   def post(self):
     """ Claim a subscription """
     args = self.reqparse.parse_args()
@@ -838,6 +866,7 @@ class SubscriptionChangeNumber(Resource):
         }
       ]
     )
+  @auth.login_required
   def post(self):
     """
       Change number assigned to IMEI.
