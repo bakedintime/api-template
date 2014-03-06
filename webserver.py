@@ -4,6 +4,7 @@ from flask import Flask, redirect, make_response, json
 from flask.ext.restful import reqparse, request, Api, Resource, fields, marshal
 from flask_swagger.flask_restful_swagger import swagger
 from flask.ext.httpauth import HTTPBasicAuth
+from werkzeug.contrib.fixers import ProxyFix
 
 app = Flask(__name__, static_url_path='/api/docs')
 auth = HTTPBasicAuth()
@@ -942,6 +943,9 @@ def after(response):
 @app.route('/api/docs', endpoint='api-docs')
 def api_webdocs():
   return redirect('/api/docs/index.html')
+
+# Proxy setup that works with nginx
+app.wsgi_app = ProxyFix(app.wsgi_app)
 
 if __name__ == '__main__':
   app.run(host='***REMOVED***.200.34')
