@@ -14,15 +14,17 @@ both folder path (c:\Python27) and Scripts folder (c:\Python27\Scripts).
 3. Install setuptools and pip.
 4. Install virtualenv:
 
-    pip install virtualenv
+        pip install virtualenv
 
 5. Setup virtualenv on the above folder: 
 
-    cd ..
-    virtualenv venv
+        cd ..
+        virtualenv venv
 
 6. Enter the virtual environment:
-    cd segurosAPI
+
+        cd segurosAPI
+
     on Windows:
 
         ..\venv\Scripts\activate
@@ -37,15 +39,15 @@ From within virtual environment
 
 8. Clone repository (Assuming ssh-keys are already added):
 
-    git clone git@git.tir:seguros/seguro***REMOVED***pi.git
+        git clone git@git.tir:seguros/seguro***REMOVED***pi.git
 
 9. Install requirements:
 
-    pip install -r requirements.txt
+        pip install -r requirements.txt
 
 10. Run server:
 
-    python webserver.py
+        python webserver.py
 
 Deployment On *nix
 --------
@@ -53,17 +55,17 @@ Deployment On *nix
 2. Install nginx
 3. Copy supervisor example conf from conf folder:
 
-    cp conf/supervisord.conf.example /etc/supervisor/supervisord.conf.example
+        cp conf/supervisord.conf.example /etc/supervisor/supervisord.conf.example
 
 4. Replace default conf file with the example
 5. Reload supervisor and start the process
 
-    sudo supervisorctl reload
-    sudo supervisorctl status (Check if is running otherwise: sudo supervisorctl start seguro***REMOVED***pi) 
+        sudo supervisorctl reload
+        sudo supervisorctl status (Check if is running otherwise: sudo supervisorctl start seguro***REMOVED***pi) 
 
 6. If the status shows an unsuccessful mes***REMOVED***ge, check the logs:
 
-    tail -200 /var/log/supervisor/seguro***REMOVED***pi/out.log
+        tail -200 /var/log/supervisor/seguro***REMOVED***pi/out.log
 
 Troubleshooting
 --------
