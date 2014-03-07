@@ -48,7 +48,7 @@ apiDescription = """<p>REST API description of insurance management. <br/> All r
 
 # Swagger generator wrapper
 api = swagger.docs(Api(app), apiVersion='0.1.0',
-                   basePath='http://localhost:5000',
+                   basePath='http://***REMOVED***.200.34',
                    resourcePath='/',
                    produces=["application/json"],
                    api_spec_url='/api/specs',
