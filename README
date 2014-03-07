@@ -19,13 +19,16 @@ both folder path (c:\Python27) and Scripts folder (c:\Python27\Scripts).
     virtualenv venv
 6. Enter the virtual environment:
     cd segurosAPI
-    ..\venv\Scripts\activate
+    on Windows:
+        ..\venv\Scripts\activate
+    on *nix:
+        . ../venv/bin/activate or source ../venv/bin/activate, if supported.
 
 7. if not present, install git
 
 From within virtual environment
 
-8. Clone repository:
+8. Clone repository (Assuming ssh-keys are already added):
     git clone git@git.tir:seguros/seguro***REMOVED***pi.git
 
 9. Install requirements:
