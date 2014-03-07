@@ -37,6 +37,19 @@ From within virtual environment
 10. Run server:
     python webserver.py
 
+Deployment On *nix
+------------
+1. Install supervisor
+2. Install nginx
+3. Copy supervisor example conf from conf folder:
+    cp conf/supervisord.conf.example /etc/supervisor/supervisord.conf.example
+4. Replace default conf file with the example
+5. Reload supervisor and start the process
+    sudo supervisorctl reload
+    sudo supervisorctl status (Check if is running otherwise: sudo supervisorctl start seguro***REMOVED***pi) 
+6. If the status shows an unsuccessful mes***REMOVED***ge, check the logs:
+    tail -200 /var/log/supervisor/seguro***REMOVED***pi/out.log
+
 Troubleshooting
 ------------
 If virtualenv venv fails to execute with an error like:
