@@ -45,7 +45,13 @@ From within virtual environment
 
         pip install -r requirements.txt
 
-10. Run server:
+10. Change ip configuration:
+
+    Change to the according ip address from the server in the following files:
+    webserver.py (line 51)
+    static/index.html (line 23)
+
+11. Run server:
 
         python webserver.py
 
