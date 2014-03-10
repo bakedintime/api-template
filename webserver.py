@@ -31,7 +31,8 @@ apiDescription = """<p>REST API description of insurance management. <br/> All r
     The API relies on Basic Authentication via Request Headers descibed as:
       <pre>Authorization: Basic encodedString</pre>
       <br/>
-    where encodedString represents the 64 base encoding of the concatenation of "username:password". All endpoints must receive this header
+    where encodedString represents the 64 base encoding of the concatenation of "username:password". All endpoints must receive this header.
+    Test user and password are: <b>tigo</b> and <b>t3$tus3r</b>
     To set this header to test the endpoints in this api use the following inputs:
   </p>
   <form class='basic_auth_info'>
