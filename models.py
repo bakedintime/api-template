@@ -131,18 +131,14 @@ class MSDriver():
         else:
             return False
 
-    def find_user_match(self, identifier):
+    def getLineStatus(self, telephone):
         cursor = self.segurosDB.cursor()
-        query = "exec %s ?" % (self.settings.get('SegurosDB','findUserMatch'))
-        self.logger.debug('Executing query %s with param: %s' % (query, identifier))
-        cursor.execute(query, unicode(identifier).encode('utf8'))
+        query = "exec %s ?" % (self.settings.get('SegurosDB','getLineStatus'))
+        self.logger.debug('Executing query %s with param: %s' % (query, telephone))
+        cursor.execute(query, unicode(telephone).encode('utf8'))
         row = cursor.fetchone()
         cursor.close()
         if row and row[0] != 0:
             return row
         else:
             return None
-
-
-    def is_valid_dpi(self, dpi):
-        return (len(dpi)==13 and not dpi.i***REMOVED***lpha())
