@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import ConfigParser
 import random, hashlib
 from flask import Flask, redirect, make_response, json
 from flask.ext.restful import reqparse, request, Api, Resource, fields, marshal
@@ -47,9 +48,14 @@ apiDescription = """<p>REST API description of insurance management. <br/> All r
   </p>
   """
 
+# Initializes settings file.
+settings = ConfigParser.SafeConfigParser()
+settings.read('conf/settings.cfg')
+
 # Swagger generator wrapper
 api = swagger.docs(Api(app), apiVersion='0.1.0',
-                   basePath='http://***REMOVED***.200.34',
+                  #***REMOVED***.200.34
+                   basePath='http://'+settings.get('API','host'),
                    resourcePath='/',
                    produces=["application/json"],
                    api_spec_url='/api/specs',
