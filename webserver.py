@@ -6,6 +6,8 @@ from flask.ext.restful import reqparse, request, Api, Resource, fields, marshal
 from flask_swagger.flask_restful_swagger import swagger
 from flask.ext.httpauth import HTTPBasicAuth
 from werkzeug.contrib.fixers import ProxyFix
+from models import MSDriver
+
 
 app = Flask(__name__, static_url_path='/api/docs')
 auth = HTTPBasicAuth()
@@ -52,6 +54,9 @@ apiDescription = """<p>REST API description of insurance management. <br/> All r
 settings = ConfigParser.SafeConfigParser()
 settings.read('conf/settings.cfg')
 
+# Instantiate a sql server driver
+msdriver = MSDriver()
+        
 # Swagger generator wrapper
 api = swagger.docs(Api(app), apiVersion='0.1.0',
                   #***REMOVED***.200.34
@@ -67,7 +72,6 @@ api = swagger.docs(Api(app), apiVersion='0.1.0',
 
 
 # Authentication Functions
-
 @auth.get_password
 def get_pw(username):
   if username in users:
@@ -699,12 +703,13 @@ class SubscriptionStatus(Resource):
       Get the status of subcription of a telephone number.
     """ 
     choice = random.randint(1,10)
+    status = msdriver.getLineStatus(numeroTelefono)
     if ( 1 <= choice < 4 ):
       response = BaseResponseFields(
         status='success',
         data={
           'numeroCertificado':'A15324',
-          'numeroTelefono':'54612348',
+          'numeroTelefono':'50254612348',
           'nombreCompleto':'José Ordoñez',
           'CUI':'251061534862',
           'codigoReclamo':'3252',
