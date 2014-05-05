@@ -2,3 +2,4 @@ flask
 flask-restful
 Flask-HTTPAuth
 gunicorn
+https://pyodbc.googlecode.com/files/pyodbc-3.0.6.zip
