@@ -373,7 +373,7 @@ class SubscriptionBilling(Resource):
             {
               "id": "0",
               "payload": {
-                "data": {"mes***REMOVED***ge":"Subscription successfully billed."},
+                "data": {"mes***REMOVED***ge":"Suscripción realizada éxito***REMOVED***mente."},
                 "errorCode": "null",
                 "errorMes***REMOVED***ge": "null",
                 "meta": {
@@ -543,7 +543,7 @@ class SubscriptionCancellation(Resource):
             {
               "id": "0",
               "payload": {
-                "data": {"mes***REMOVED***ge":"Subscription successfully cancelled."},
+                "data": {"mes***REMOVED***ge":"Suscripción cancelada éxito***REMOVED***mente."},
                 "errorCode": "null",
                 "errorMes***REMOVED***ge": "null",
                 "meta": {
@@ -620,7 +620,7 @@ class SubscriptionStatus(Resource):
       parameters=[
         {
           "name": "numeroTelefono",
-          "description": "Telephone number assigned to susbcription",
+          "description": "Número de teléfono asignado a suscripción.",
           "required": True,
           "allowMultiple": False,
           "dataType": str.__name__,
