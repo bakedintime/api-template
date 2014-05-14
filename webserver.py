@@ -703,48 +703,77 @@ class SubscriptionStatus(Resource):
     """
       Get the status of subcription of a telephone number.
     """ 
-    choice = random.randint(1,10)
-    status = msdriver.getLineStatus(numeroTelefono)
-    if ( 1 <= choice < 4 ):
-      response = BaseResponseFields(
-        status='success',
-        data={
-          'numeroCertificado':'A15324',
-          'numeroTelefono':'50254612348',
-          'nombreCompleto':'José Ordoñez',
-          'CUI':'251061534862',
-          'codigoReclamo':'3252',
-          'cobertura':'2000.00'
-        }
-      )
-      status = 200
-    elif (4 <= choice < 7):
-      response = BaseResponseFields(
-        status='fail',
-        data={
-          'code':'TF0001',
-          'mes***REMOVED***ge':u'No existe certificado para este número.',
-        }
-      )
-      status = 404
-    elif (7 <= choice < 8):
-      response = BaseResponseFields(
-        status='fail',
-        data={
-          'code':'TF0002',
-          'mes***REMOVED***ge':u'Fecha de bloqueo no procede.',
-        }
-      )
-      status = 400  
-    else:
+    response_codes = {
+      2:'TF0002',
+      3:'TF0003',
+      4:'TF0004',
+      0:'TF0005',
+      5:'TE0002'
+    }
+    response_mes***REMOVED***ge = {
+      2:u'No cumple con plazo mínimo de uso antes de reclamo.',
+      3:u'El certificado asociado al número no se encuentra en estado activo o cancelado',
+      4:u'No existe bloqueo para último certificado de este número.',
+      0:u'Estatus: Reclamo inválido. Fecha de bloqueo no procede.',
+      5:u'Error Interno'
+    }
+    try:
+      if not msdriver.exists_certificate(numeroTelefono,'robos'):
+        response = BaseResponseFields(
+          status='fail',
+          data={
+            'code':'TF0001',
+            'mes***REMOVED***ge':(u'No existe certificado para el número %s.' % (numeroTelefono))
+          }
+        )
+        status = 404
+        return wrap_response(response, status, {'Content-Type':'application/json'})
+      # Obtener con el API si el telefono esta bloqueado y en que fecha se efectuo
+      # para mandarlo al metodo de is_payment_enabled()
+      # models.is_blocked_IMEI
+      result = msdriver.is_payment_enabled(numeroTelefono, '2014/05/02', 1)
+      print result
+      if result[0] == 1:
+        response = BaseResponseFields(
+          status='success',
+          data={
+            'numeroCertificado':result[1],
+            'numeroTelefono':result[2],
+            'nombreCompleto':result[3],
+            'CUI':result[4],
+            'codigoReclamo':result[5],
+            'cobertura':result[6]
+          }
+        )
+        status = 200
+      elif result[0] == 0:
+        response = BaseResponseFields(
+          status='error',
+          data=None,
+          errorMes***REMOVED***ge= response_mes***REMOVED***ge[result[0]],
+          errorCode= response_codes[result[0]]
+        )
+        status = 500
+      else:
+        response = BaseResponseFields(
+          status='fail',
+          data={
+            'code': response_codes[result[0]],
+            'mes***REMOVED***ge': response_mes***REMOVED***ge[result[0]],
+          }
+        )
+        status = 400  
+      return wrap_response(response, status, {'Content-Type':'application/json'})
+    except Exception, e:
       response = BaseResponseFields(
         status='error',
         data=None,
-        errorMes***REMOVED***ge=u'El servicio no está disponible en este momento.',
-        errorCode='TE0001'
+        errorMes***REMOVED***ge= response_mes***REMOVED***ge[5],
+        errorCode= response_codes[5]
       )
       status = 500
-    return wrap_response(response, status, {'Content-Type':'application/json'})
+      print str(e)
+      return wrap_response(response, status, {'Content-Type':'application/json'})
 
 class SubscriptionClaim(Resource):
   """
