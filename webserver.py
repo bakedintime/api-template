@@ -59,17 +59,20 @@ settings.read('conf/settings.cfg')
 msdriver = MSDriver()
         
 # Swagger generator wrapper
-api = swagger.docs(Api(app), apiVersion='0.1.0',
-                  #***REMOVED***.200.34
-                   basePath='http://'+settings.get('API','host'),
-                   resourcePath='/',
-                   produces=["application/json"],
-                   api_spec_url='/api/specs',
-                   info=dict(
-                    title="Seguros API © Grupo TIR, S.A.",
-                    description=apiDescription,
-                    contact="jdigherob@tir.com.gt",
-                  ))
+api = swagger.docs(
+  Api(app),
+  apiVersion='0.1.0',
+  #***REMOVED***.200.34
+  basePath='http://'+settings.get('API','host'),
+  resourcePath='/',
+  produces=["application/json"],
+  api_spec_url='/api/specs',
+  info=dict(
+    title="Seguros API © Grupo TIR, S.A.",
+    description=apiDescription,
+    contact="jdigherob@tir.com.gt",
+  )
+)
 
 
 # Authentication Functions
