@@ -981,10 +981,9 @@ def after(response):
     
     return response
 
-@app.route('/api/docs/')
-@app.route('/api/docs', endpoint='api-docs')
+@app.route('/', endpoint='api-docs')
 def api_webdocs():
-  return redirect('/api/docs/index.html')
+  return redirect('/api/specs.html')
 
 # Proxy setup that works with nginx
 app.wsgi_app = ProxyFix(app.wsgi_app)
