@@ -625,79 +625,79 @@ class SubscriptionStatus(Resource):
     Subscription get status documentation
   """
   @swagger.operation(
-      notes="Inquiry on the status of a given telephone's subscription",
-      responseClass=SubscriptionStatusResponse,
-      nickname='getStatus',
-      parameters=[
+    notes="Inquiry on the status of a given telephone's subscription",
+    responseClass=SubscriptionStatusResponse,
+    nickname='getStatus',
+    parameters=[
+      {
+        "name": "numeroTelefono",
+        "description": "Número de teléfono asignado a suscripción.",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "path"
+      },
+    ],
+    responseMes***REMOVED***ges=[
+      {
+        "code": 400,
+        "mes***REMOVED***ge":"""<pre>
         {
-          "name": "numeroTelefono",
-          "description": "Número de teléfono asignado a suscripción.",
-          "required": True,
-          "allowMultiple": False,
-          "dataType": str.__name__,
-          "paramType": "path"
-        },
-      ],
-      responseMes***REMOVED***ges=[
+          "data": {
+            "mes***REMOVED***ge": "No existe bloqueo para último certificado de este número.",
+            "code": "TF0004"
+          },
+          "errorCode": null,
+          "errorMes***REMOVED***ge": null,
+          "meta": {
+            "status": "fail"
+          }
+        }</pre>"""
+      },
+      {
+        "code": 400,
+        "mes***REMOVED***ge":"""<pre>
         {
-          "code": 400,
-          "mes***REMOVED***ge":"""<pre>
-          {
-            "data": {
-              "mes***REMOVED***ge": "No existe bloqueo de IMEI para este número.",
-              "code": "TF0003"
-            },
-            "errorCode": null,
-            "errorMes***REMOVED***ge": null,
-            "meta": {
-              "status": "fail"
-            }
-          }</pre>"""
-        },
+          "data": {
+            "mes***REMOVED***ge": "Estatus: Reclamo inválido. Fecha de bloqueo no procede.",
+            "code": "TF0005"
+          },
+          "errorCode": null,
+          "errorMes***REMOVED***ge": null,
+          "meta": {
+            "status": "fail"
+          }
+        }</pre>"""
+      },
+      {
+        "code": 404,
+        "mes***REMOVED***ge":"""<pre>
         {
-          "code": 400,
-          "mes***REMOVED***ge":"""<pre>
-          {
-            "data": {
-              "mes***REMOVED***ge": "Fecha de bloqueo no procede.",
-              "code": "TF0002"
-            },
-            "errorCode": null,
-            "errorMes***REMOVED***ge": null,
-            "meta": {
-              "status": "fail"
-            }
-          }</pre>"""
-        },
+          "data": {
+            "mes***REMOVED***ge": "No existe certificado para el número 50212345678.",
+            "code": "TF0001"
+          },
+          "errorCode": null,
+          "errorMes***REMOVED***ge": null,
+          "meta": {
+            "status": "fail"
+          }
+        }</pre>"""
+      },
+      {
+        "code": 500,
+        "mes***REMOVED***ge": """<pre>
         {
-          "code": 404,
-          "mes***REMOVED***ge":"""<pre>
-          {
-            "data": {
-              "mes***REMOVED***ge": "No existe certificado para este número.",
-              "code": "TF0001"
-            },
-            "errorCode": null,
-            "errorMes***REMOVED***ge": null,
-            "meta": {
-              "status": "fail"
-            }
-          }</pre>"""
-        },
-        {
-          "code": 500,
-          "mes***REMOVED***ge": """<pre>
-          {
-            "data": null,
-            "errorCode": "TE0001",
-            "errorMes***REMOVED***ge": "El servicio no está disponible en este momento.",
-            "meta": {
-              "status": "error"
-            }
-          }</pre>"""
-        }
-      ]
-    )
+          "data": null,
+          "errorCode": "TE0001",
+          "errorMes***REMOVED***ge": "El servicio no está disponible en este momento.",
+          "meta": {
+            "status": "error"
+          }
+        }</pre>"""
+      }
+    ]
+  )
   @auth.login_required
   def get(self, numeroTelefono):
     """
@@ -755,49 +755,49 @@ class SubscriptionClaim(Resource):
     super(SubscriptionClaim, self).__init__()
 
   @swagger.operation(
-      notes="Claim a subscription.",
-      responseClass=SubscriptionClaimResponse,
-      nickname='claimSubscription',
-      parameters=[
+    notes="Claim a subscription.",
+    responseClass=SubscriptionClaimResponse,
+    nickname='claimSubscription',
+    parameters=[
+      {
+        "name": "request",
+        "description": "Claim subscription request.",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": SubscriptionClaimRequest.__name__,
+        "paramType": "body"
+      },
+    ],
+    responseMes***REMOVED***ges=[
+      {
+        "code": 404,
+        "mes***REMOVED***ge":"""<pre>
         {
-          "name": "request",
-          "description": "Claim subscription request.",
-          "required": True,
-          "allowMultiple": False,
-          "dataType": SubscriptionClaimRequest.__name__,
-          "paramType": "body"
-        },
-      ],
-      responseMes***REMOVED***ges=[
+          "data": {
+            "mes***REMOVED***ge": "No existe código de reclamo.",
+            "code": "TF0001"
+          },
+          "errorCode": null,
+          "errorMes***REMOVED***ge": null,
+          "meta": {
+            "status": "fail"
+          }
+        }</pre>"""
+      },
+      {
+        "code": 500,
+        "mes***REMOVED***ge": """<pre>
         {
-          "code": 404,
-          "mes***REMOVED***ge":"""<pre>
-          {
-            "data": {
-              "mes***REMOVED***ge": "No existe código de reclamo.",
-              "code": "TF0001"
-            },
-            "errorCode": null,
-            "errorMes***REMOVED***ge": null,
-            "meta": {
-              "status": "fail"
-            }
-          }</pre>"""
-        },
-        {
-          "code": 500,
-          "mes***REMOVED***ge": """<pre>
-          {
-            "data": null,
-            "errorCode": "TE0001",
-            "errorMes***REMOVED***ge": "El servicio no está disponible en este momento.",
-            "meta": {
-              "status": "error"
-            }
-          }</pre>"""
-        }
-      ]
-    )
+          "data": null,
+          "errorCode": "TE0001",
+          "errorMes***REMOVED***ge": "El servicio no está disponible en este momento.",
+          "meta": {
+            "status": "error"
+          }
+        }</pre>"""
+      }
+    ]
+  )
   @auth.login_required
   def post(self):
     """ Claim a subscription """
@@ -840,64 +840,64 @@ class SubscriptionChangeNumber(Resource):
     super(SubscriptionChangeNumber, self).__init__()
 
   @swagger.operation(
-      notes="Update IMEI assigned to a number.",
-      responseClass=SubscriptionChangeNumberResponse,
-      nickname='changeNumber',
-      parameters=[
+    notes="Update IMEI assigned to a number.",
+    responseClass=SubscriptionChangeNumberResponse,
+    nickname='changeNumber',
+    parameters=[
+      {
+        "name": "request",
+        "description": "Change Number request",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": SubscriptionChangeNumberRequest.__name__,
+        "paramType": "body"
+      },
+    ],
+    responseMes***REMOVED***ges=[
+      {
+        "code": 400,
+        "mes***REMOVED***ge":"""<pre>
         {
-          "name": "request",
-          "description": "Change Number request",
-          "required": True,
-          "allowMultiple": False,
-          "dataType": SubscriptionChangeNumberRequest.__name__,
-          "paramType": "body"
-        },
-      ],
-      responseMes***REMOVED***ges=[
+          "data": {
+            "mes***REMOVED***ge": "No existe bloqueo de IMEI para este número.",
+            "code": "TF0003"
+          },
+          "errorCode": null,
+          "errorMes***REMOVED***ge": null,
+          "meta": {
+            "status": "fail"
+          }
+        }</pre>"""
+      },
+      {
+        "code": 404,
+        "mes***REMOVED***ge":"""<pre>
         {
-          "code": 400,
-          "mes***REMOVED***ge":"""<pre>
-          {
-            "data": {
-              "mes***REMOVED***ge": "No existe bloqueo de IMEI para este número.",
-              "code": "TF0003"
-            },
-            "errorCode": null,
-            "errorMes***REMOVED***ge": null,
-            "meta": {
-              "status": "fail"
-            }
-          }</pre>"""
-        },
+          "data": {
+            "mes***REMOVED***ge": "Este número no existe.",
+            "code": "TF0001"
+          },
+          "errorCode": null,
+          "errorMes***REMOVED***ge": null,
+          "meta": {
+            "status": "fail"
+          }
+        }</pre>"""
+      },
+      {
+        "code": 500,
+        "mes***REMOVED***ge": """<pre>
         {
-          "code": 404,
-          "mes***REMOVED***ge":"""<pre>
-          {
-            "data": {
-              "mes***REMOVED***ge": "Este número no existe.",
-              "code": "TF0001"
-            },
-            "errorCode": null,
-            "errorMes***REMOVED***ge": null,
-            "meta": {
-              "status": "fail"
-            }
-          }</pre>"""
-        },
-        {
-          "code": 500,
-          "mes***REMOVED***ge": """<pre>
-          {
-            "data": null,
-            "errorCode": "TE0001",
-            "errorMes***REMOVED***ge": "El servicio no está disponible en este momento.",
-            "meta": {
-              "status": "error"
-            }
-          }</pre>"""
-        }
-      ]
-    )
+          "data": null,
+          "errorCode": "TE0001",
+          "errorMes***REMOVED***ge": "El servicio no está disponible en este momento.",
+          "meta": {
+            "status": "error"
+          }
+        }</pre>"""
+      }
+    ]
+  )
   @auth.login_required
   def post(self):
     """
