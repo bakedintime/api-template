@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import ConfigParser
 import random, hashlib
-from flask import Flask, redirect, make_response, json
+import simplejson as json
+from flask import Flask, redirect, make_response
 from flask.ext.restful import reqparse, request, Api, Resource, fields, marshal
 from flask_swagger.flask_restful_swagger import swagger
 from flask.ext.httpauth import HTTPBasicAuth
