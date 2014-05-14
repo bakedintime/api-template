@@ -95,50 +95,49 @@ class MSDriver():
         else:
             return 'Este men***REMOVED***je no ha sido configurado'
 
-    def is_blacklisted(self, number):
-        cursor = self.segurosDB.cursor()
-        query = "exec %s ?" % (self.settings.get('SegurosDB','isBlacklisted'))
-        self.logger.debug('Executing query %s with param: %s' % (query, number))
-        cursor.execute(query, unicode(number).encode('utf8'))
-        row = cursor.fetchone()
-        cursor.close()
-        if row and row[0] == 1:
-            return True
-        else:
-            return False
+    # Stored procedures
 
-    def is_user_already(self, identifier, _type, certificateType):
+    def is_payment_enabled(self, telephone, fechaBloqueo, estaBloqueado):
         cursor = self.segurosDB.cursor()
-        query = "exec %s ?, ?, ?" % (self.settings.get('SegurosDB','isUserAlready'))
-        self.logger.debug('Executing query %s with param: %s, %s, %s' % (query, identifier, _type, certificateType))
-        cursor.execute(query, unicode(identifier).encode('utf8'), unicode(_type).encode('utf8'), unicode(certificateType).encode('utf8'))
+        query = "exec %s ?, ?, ?" % (self.settings.get('SegurosDB','isPaymentEnabled'))
+        self.logger.debug('Executing query %s with param: %s, %s, %s' % (query, telephone, fechaBloqueo, estaBloqueado))
+        cursor.execute(
+            query,
+            unicode(telephone).encode('utf8'),
+            unicode(fechaBloqueo).encode('utf8'),
+            estaBloqueado
+        )
         row = cursor.fetchone()
         cursor.close()
-        if row and row[0] == 1:
-            return True
-        else:
-            return False
-
-    def is_time_limit_violation(self, number):
-        cursor = self.segurosDB.cursor()
-        query = "exec %s ?" % (self.settings.get('SegurosDB','isTimeLimitViolation'))
-        self.logger.debug('Executing query %s with param: %s' % (query, number))
-        cursor.execute(query, unicode(number).encode('utf8'))
-        row = cursor.fetchone()
-        cursor.close()
-        if row and row[0] == 1:
-            return True
-        else:
-            return False
-
-    def getLineStatus(self, telephone):
-        cursor = self.segurosDB.cursor()
-        query = "exec %s ?" % (self.settings.get('SegurosDB','getLineStatus'))
-        self.logger.debug('Executing query %s with param: %s' % (query, telephone))
-        cursor.execute(query, unicode(telephone).encode('utf8'))
-        row = cursor.fetchone()
-        cursor.close()
-        if row and row[0] != 0:
+        if row:
             return row
         else:
             return None
+
+    def is_blocked_IMEI(self, number):
+        return False
+
+    def exists_certificate(self, number, _type):
+        cursor = self.segurosDB.cursor()
+        try:
+            query = "exec %s ?" % (self.settings.get('SegurosDB','getAllCertificates'))
+            self.logger.debug('Executing query %s with param: %s' % (query, number))
+            cursor.execute(
+                query,
+                unicode(number).encode('utf8'),
+            )
+            rows = cursor.fetchall()
+            certificates = {}
+            for row in rows:
+                certificates[row[0]] = row[1]
+            if _type in certificates:
+                return True
+            else:
+                return False
+
+        except Exception,e:
+            self.logger.error(str(e), exc_info=True)
+            return False
+        finally:
+            cursor.close()
+
