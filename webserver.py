@@ -959,33 +959,46 @@ class SubscriptionChangeNumber(Resource):
       Change number assigned to IMEI.
     """
     args = self.reqparse.parse_args()
-    choice = random.randint(1,10)
-    if ( 1 <= choice < 4 ):
-      response = BaseResponseFields(
-        status='success',
-        data={
-          'mes***REMOVED***ge':'Datos actualizados éxito***REMOVED***mente',
-        }
-      )
-      status = 200
-    elif (4 <= choice < 7):
+    if (not args.IMEI) or (not args.numeroTelefono):
       response = BaseResponseFields(
         status='fail',
         data={
-          'code':'TF0001',
-          'mes***REMOVED***ge':u'El número de teléfono no existe.',
+          'code':'TF0002',
+          'mes***REMOVED***ge':u'Los campos de IMEI y numeroTelefono no deben estar vacíos.'
         }
       )
-      status = 404
-    else:
+      status = 400
+      return wrap_response(response, status, {'Content-Type':'application/json'})
+    try:
+      result = msdriver.change_number(args.IMEI, args.numeroTelefono)
+      if result[0] == 1:
+        response = BaseResponseFields(
+          status='success',
+          data={
+            'mes***REMOVED***ge':'Datos actualizados éxito***REMOVED***mente',
+          }
+        )
+        status = 200
+      else:
+        response = BaseResponseFields(
+          status='fail',
+          data={
+            'code':'TF0001',
+            'mes***REMOVED***ge':u'El IMEI no existe en la base de datos.',
+          }
+        )
+        status = 404
+      return wrap_response(response, status, {'Content-Type':'application/json'})
+    except Exception, e:
       response = BaseResponseFields(
         status='error',
         data=None,
-        errorMes***REMOVED***ge=u'El servicio no está disponible en este momento.',
-        errorCode='TE0001'
+        errorMes***REMOVED***ge= u'Error Interno',
+        errorCode= 'TE0002'
       )
       status = 500
-    return wrap_response(response, status, {'Content-Type':'application/json'})
+      print str(e)
+      return wrap_response(response, status, {'Content-Type':'application/json'})
 
 # Api description
 api.add_resource(SubscriptionBilling, '/subscriptions/charge', endpoint='chargeSubscription')
