@@ -836,34 +836,55 @@ class SubscriptionClaim(Resource):
   @auth.login_required
   def post(self):
     """ Claim a subscription """
+    response_codes = {
+      'a':'TF0002',
+      'b':'TF0003',
+    }
+    response_mes***REMOVED***ge = {
+      'a':u'El certificado ya ha sido pagado.',
+      'b':u'El código de reclamo no existe.',
+    }
     args = self.reqparse.parse_args()
-    choice = random.randint(1,10)
-    if ( 1 <= choice < 5 ):
-      response = BaseResponseFields(
-        status='success',
-        data={
-          'cobertura':'2000.00'
-        }
-      )
-      status = 200
-    elif (6 <= choice < 8):
+    if not args.codigoReclamo:
       response = BaseResponseFields(
         status='fail',
         data={
           'code':'TF0002',
-          'mes***REMOVED***ge':u'El código de reclamo no existe.',
+          'mes***REMOVED***ge':u'El campo de código de reclamo no debe estar vacío.'
         }
       )
-      status = 400  
-    else:
+      status = 400
+      return wrap_response(response, status, {'Content-Type':'application/json'})
+    try:
+      result = msdriver.claim_subscription(args.codigoReclamo)
+      if result[0] != 'a' and result[0] != 'b':
+        response = BaseResponseFields(
+          status='success',
+          data={
+            'cobertura': result[0]
+          }
+        )
+        status = 200
+      else:
+        response = BaseResponseFields(
+          status='fail',
+          data={
+            'code':response_codes[result[0]],
+            'mes***REMOVED***ge':response_mes***REMOVED***ge[result[0]],
+          }
+        )
+        status = 400 
+      return wrap_response(response, status, {'Content-Type':'application/json'})
+    except Exception, e:
       response = BaseResponseFields(
         status='error',
         data=None,
-        errorMes***REMOVED***ge=u'El servicio no está disponible en este momento.',
-        errorCode='TE0001'
+        errorMes***REMOVED***ge= u'Error Interno',
+        errorCode= 'TE0002'
       )
       status = 500
-    return wrap_response(response, status, {'Content-Type':'application/json'})
+      print str(e)
+      return wrap_response(response, status, {'Content-Type':'application/json'})
 
 class SubscriptionChangeNumber(Resource):
   """
