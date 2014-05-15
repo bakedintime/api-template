@@ -984,7 +984,7 @@ def after(response):
     
     return response
 
-@app.route('/', endpoint='api-docs')
+@app.route('/api', endpoint='api-docs')
 def api_webdocs():
   return redirect('/api/specs.html')
 
