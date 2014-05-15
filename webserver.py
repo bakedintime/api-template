@@ -628,7 +628,11 @@ class SubscriptionStatus(Resource):
     Subscription get status documentation
   """
   @swagger.operation(
-    notes="Inquiry on the status of a given telephone's subscription",
+    notes=
+    """Inquiry on the status of a given telephone's subscription
+      <b>Curl Example</b> (with test user and password):  <br/>
+      $ curl --header "Authorization: Basic dGlnbzp0MyR0dXMzcg==" <apiUrl>/subscription/<numTel>/status
+    """,
     responseClass=SubscriptionStatusResponse,
     nickname='getStatus',
     parameters=[
@@ -871,7 +875,11 @@ class SubscriptionChangeNumber(Resource):
     super(SubscriptionChangeNumber, self).__init__()
 
   @swagger.operation(
-    notes="Update IMEI assigned to a number.",
+    notes=
+    """Update IMEI assigned to a number. <br/>
+      <b>Curl Example</b> (with test user and password):  <br/>
+      $ curl --header "Authorization: Basic dGlnbzp0MyR0dXMzcg==" --data "IMEI=<imei>&numeroTelefono=<numTel>" <apiUrl>/subscription/changeNumber
+    """,
     responseClass=SubscriptionChangeNumberResponse,
     nickname='changeNumber',
     parameters=[
