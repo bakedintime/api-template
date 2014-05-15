@@ -892,13 +892,21 @@ class SubscriptionChangeNumber(Resource):
     nickname='changeNumber',
     parameters=[
       {
-        "name": "request",
-        "description": "Change Number request",
+        "name": "IMEI",
+        "description": "IMEI associated to mobile device",
         "required": True,
         "allowMultiple": False,
-        "dataType": SubscriptionChangeNumberRequest.__name__,
-        "paramType": "body"
+        "dataType": str.__name__,
+        "paramType": "form"
       },
+      {
+        "name": "numeroTelefono",
+        "description": "Telephone number associated to mobile device",
+        "required": True,
+        "allowMultiple": False,
+        "dataType": str.__name__,
+        "paramType": "form"
+      }
     ],
     responseMes***REMOVED***ges=[
       {
