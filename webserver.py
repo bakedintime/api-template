@@ -143,19 +143,6 @@ class SubscriptionCancellationRequest:
     'requests':fields.List(fields.Nested(SubscriptionCancellationRequestFields.resource_fields))
   }
 
-@swagger.model
-class SubscriptionClaimRequest:
-  resource_fields = {
-    'codigoReclamo':fields.String()
-  }
-
-@swagger.model
-class SubscriptionChangeNumberRequest:
-  resource_fields = {
-    'IMEI':fields.String(),
-    'numeroTelefono':fields.String()
-  }
-
 # Responses
 
 @swagger.model
