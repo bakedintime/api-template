@@ -786,7 +786,7 @@ class SubscriptionClaim(Resource):
   """
   def __init__(self):
     self.reqparse = reqparse.RequestParser()
-    self.reqparse.add_argument('codigoReclamo', type=str, required=True, help='No se ha proporcionado ningún código de reclamo.')
+    self.reqparse.add_argument('codigoReclamo', type=str, help='No se ha proporcionado ningún código de reclamo.')
     super(SubscriptionClaim, self).__init__()
 
   @swagger.operation(
