@@ -141,7 +141,6 @@ class MSDriver():
         finally:
             cursor.close()
 
-
     def change_number(self, imei, number):
         cursor = self.segurosDB.cursor()
         try:
@@ -151,6 +150,26 @@ class MSDriver():
                 query,
                 unicode(imei).encode('utf8'),
                 unicode(number).encode('utf8')
+            )
+            row = cursor.fetchone()
+            if row:
+                return row
+            else:
+                return None
+        except Exception,e:
+            self.logger.error(str(e), exc_info=True)
+            return False
+        finally:
+            cursor.close()
+
+    def claim_subscription(self, codigoReclamo):
+        cursor = self.segurosDB.cursor()
+        try:
+            query = "exec %s ?" % (self.settings.get('SegurosDB','claimSubscription'))
+            self.logger.debug('Executing query %s with param: %s' % (query, codigoReclamo))
+            cursor.execute(
+                query,
+                unicode(codigoReclamo).encode('utf8')
             )
             row = cursor.fetchone()
             if row:
