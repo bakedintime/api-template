@@ -870,8 +870,16 @@ class SubscriptionChangeNumber(Resource):
   """
   def __init__(self):
     self.reqparse = reqparse.RequestParser()
-    self.reqparse.add_argument('IMEI', type=str, required=True, help='No se ha proporcionado el valor para el IMEI.')
-    self.reqparse.add_argument('numeroTelefono', type=str, required=True, help='No se ha proporcionado un número de teléfono válido.')
+    self.reqparse.add_argument(
+      'IMEI',
+      type=str,
+      help='No se ha proporcionado el valor para el IMEI.'
+    )
+    self.reqparse.add_argument(
+      'numeroTelefono',
+      type=str,
+      help='No se ha proporcionado un número de teléfono válido.'
+    )
     super(SubscriptionChangeNumber, self).__init__()
 
   @swagger.operation(
