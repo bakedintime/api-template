@@ -795,13 +795,13 @@ class SubscriptionClaim(Resource):
     nickname='claimSubscription',
     parameters=[
       {
-        "name": "request",
-        "description": "Claim subscription request.",
+        "name": "codigoReclamo",
+        "description": "Claim code associated to subscription.",
         "required": True,
         "allowMultiple": False,
-        "dataType": SubscriptionClaimRequest.__name__,
-        "paramType": "body"
-      },
+        "dataType": str.__name__,
+        "paramType": "form"
+      }
     ],
     responseMes***REMOVED***ges=[
       {
