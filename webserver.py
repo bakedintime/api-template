@@ -790,7 +790,11 @@ class SubscriptionClaim(Resource):
     super(SubscriptionClaim, self).__init__()
 
   @swagger.operation(
-    notes="Claim a subscription.",
+    notes=
+    """Claim a subscription. <br/>
+       <b>Curl Example</b> (with test user and password):  <br/>
+       $ curl --header "Authorization: Basic dGlnbzp0MyR0dXMzcg==" --data "codigoReclamo={codigoReclamo}" {apiUrl}/subscription/claim
+    """,
     responseClass=SubscriptionClaimResponse,
     nickname='claimSubscription',
     parameters=[
