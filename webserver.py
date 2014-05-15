@@ -735,7 +735,6 @@ class SubscriptionStatus(Resource):
       # para mandarlo al metodo de is_payment_enabled()
       # models.is_blocked_IMEI
       result = msdriver.is_payment_enabled(numeroTelefono, '2014/05/02', 1)
-      print result
       if result[0] == 1:
         response = BaseResponseFields(
           status='success',
@@ -969,7 +968,7 @@ api.add_resource(SubscriptionBilling, '/subscriptions/charge', endpoint='chargeS
 api.add_resource(SubscriptionCancellation, '/subscriptions/cancel', endpoint='cancelSubscription')
 api.add_resource(SubscriptionStatus,  '/subscription/<string:numeroTelefono>/status', endpoint='getStatus')
 api.add_resource(SubscriptionClaim, '/subscription/claim', endpoint='ClaimSubscription')
-api.add_resource(SubscriptionChangeNumber, '/subscription/changeImei', endpoint='ChangeImei')
+api.add_resource(SubscriptionChangeNumber, '/subscription/changeNumber', endpoint='ChangeNumber')
 
 # App routing
 
