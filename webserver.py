@@ -967,7 +967,7 @@ class SubscriptionChangeNumber(Resource):
 # Api description
 api.add_resource(SubscriptionBilling, '/subscriptions/charge', endpoint='chargeSubscription')
 api.add_resource(SubscriptionCancellation, '/subscriptions/cancel', endpoint='cancelSubscription')
-api.add_resource(SubscriptionStatus,  '/subscription/<string:numeroTelefono>/status/', endpoint='getStatus')
+api.add_resource(SubscriptionStatus,  '/subscription/<string:numeroTelefono>/status', endpoint='getStatus')
 api.add_resource(SubscriptionClaim, '/subscription/claim', endpoint='ClaimSubscription')
 api.add_resource(SubscriptionChangeNumber, '/subscription/changeImei', endpoint='ChangeImei')
 
