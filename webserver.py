@@ -1162,7 +1162,7 @@ def after(response):
 
 @app.route('/api', endpoint='api-docs')
 def api_webdocs():
-  return redirect('/api/specs.html')
+  return redirect('/api/specs.html#!/specs.json')
 
 # Proxy setup that works with nginx
 app.wsgi_app = ProxyFix(app.wsgi_app)
