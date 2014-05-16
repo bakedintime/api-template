@@ -638,6 +638,36 @@ class SubscriptionStatus(Resource):
         "mes***REMOVED***ge":"""<pre>
         {
           "data": {
+            "mes***REMOVED***ge": "No cumple con plazo mínimo de uso antes de reclamo.",
+            "code": "TF0002"
+          },
+          "errorCode": null,
+          "errorMes***REMOVED***ge": null,
+          "meta": {
+            "status": "fail"
+          }
+        }</pre>"""
+      },
+      {
+        "code": 400,
+        "mes***REMOVED***ge":"""<pre>
+        {
+          "data": {
+            "mes***REMOVED***ge": "El certificado asociado al número no se encuentra en estado activo o cancelado.",
+            "code": "TF0003"
+          },
+          "errorCode": null,
+          "errorMes***REMOVED***ge": null,
+          "meta": {
+            "status": "fail"
+          }
+        }</pre>"""
+      },
+      {
+        "code": 400,
+        "mes***REMOVED***ge":"""<pre>
+        {
+          "data": {
             "mes***REMOVED***ge": "No existe bloqueo para último certificado de este número.",
             "code": "TF0004"
           },
@@ -689,6 +719,18 @@ class SubscriptionStatus(Resource):
             "status": "error"
           }
         }</pre>"""
+      },
+      {
+        "code": 500,
+        "mes***REMOVED***ge": """<pre>
+        {
+          "data": null,
+          "errorCode": "TE0002",
+          "errorMes***REMOVED***ge": "Error Interno.",
+          "meta": {
+            "status": "error"
+          }
+        }</pre>"""
       }
     ]
   )
@@ -706,7 +748,7 @@ class SubscriptionStatus(Resource):
     }
     response_mes***REMOVED***ge = {
       2:u'No cumple con plazo mínimo de uso antes de reclamo.',
-      3:u'El certificado asociado al número no se encuentra en estado activo o cancelado',
+      3:u'El certificado asociado al número no se encuentra en estado activo o cancelado.',
       4:u'No existe bloqueo para último certificado de este número.',
       0:u'Estatus: Reclamo inválido. Fecha de bloqueo no procede.',
       5:u'Error Interno'
@@ -796,6 +838,35 @@ class SubscriptionClaim(Resource):
     ],
     responseMes***REMOVED***ges=[
       {
+        "code": 200,
+        "mes***REMOVED***ge":"""<pre>
+        {
+          "data": {
+            "cobertura": 500,
+          },
+          "errorCode": null,
+          "errorMes***REMOVED***ge": null,
+          "meta": {
+            "status": "success"
+          }
+        }</pre>"""
+      },
+      {
+        "code": 400,
+        "mes***REMOVED***ge":"""<pre>
+        {
+          "data": {
+            "mes***REMOVED***ge": "El campo de código de reclamo no debe estar vacío.",
+            "code": "TF0001"
+          },
+          "errorCode": null,
+          "errorMes***REMOVED***ge": null,
+          "meta": {
+            "status": "fail"
+          }
+        }</pre>"""
+      },
+      {
         "code": 404,
         "mes***REMOVED***ge":"""<pre>
         {
@@ -817,6 +888,18 @@ class SubscriptionClaim(Resource):
           "data": null,
           "errorCode": "TE0001",
           "errorMes***REMOVED***ge": "El servicio no está disponible en este momento.",
+          "meta": {
+            "status": "error"
+          }
+        }</pre>"""
+      },
+      {
+        "code": 500,
+        "mes***REMOVED***ge": """<pre>
+        {
+          "data": null,
+          "errorCode": "TE0002",
+          "errorMes***REMOVED***ge": "Error Interno.",
           "meta": {
             "status": "error"
           }
@@ -922,12 +1005,26 @@ class SubscriptionChangeNumber(Resource):
     ],
     responseMes***REMOVED***ges=[
       {
+        "code": 200,
+        "mes***REMOVED***ge":"""<pre>
+        {
+          "data": {
+            "mes***REMOVED***ge": "Datos actualizados éxito***REMOVED***mente.",
+          },
+          "errorCode": null,
+          "errorMes***REMOVED***ge": null,
+          "meta": {
+            "status": "success"
+          }
+        }</pre>"""
+      },
+      {
         "code": 400,
         "mes***REMOVED***ge":"""<pre>
         {
           "data": {
-            "mes***REMOVED***ge": "No existe bloqueo de IMEI para este número.",
-            "code": "TF0003"
+            "mes***REMOVED***ge": "Los campos de IMEI y numeroTelefono no deben estar vacíos.",
+            "code": "TF0001"
           },
           "errorCode": null,
           "errorMes***REMOVED***ge": null,
@@ -962,6 +1059,18 @@ class SubscriptionChangeNumber(Resource):
             "status": "error"
           }
         }</pre>"""
+      },
+      {
+        "code": 500,
+        "mes***REMOVED***ge": """<pre>
+        {
+          "data": null,
+          "errorCode": "TE0002",
+          "errorMes***REMOVED***ge": "Error Interno.",
+          "meta": {
+            "status": "error"
+          }
+        }</pre>"""
       }
     ]
   )
@@ -987,7 +1096,7 @@ class SubscriptionChangeNumber(Resource):
         response = BaseResponseFields(
           status='success',
           data={
-            'mes***REMOVED***ge':'Datos actualizados éxito***REMOVED***mente',
+            'mes***REMOVED***ge':'Datos actualizados éxito***REMOVED***mente.',
           }
         )
         status = 200
