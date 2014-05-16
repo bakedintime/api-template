@@ -68,7 +68,7 @@ class ResourceLister(Resource):
       "apis": [
         {
           "path": '/..' * (len(api_spec_endpoint.split('/')) + 1)  + api_spec_endpoint,
-          "description": "Auto generated API docs by flask-restful-swagger"
+          "description": "API endpoints"
         }
       ],
       "info": registry['info']
