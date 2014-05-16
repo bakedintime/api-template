@@ -47,7 +47,17 @@ homepage_html = """
 </div>
 <div id="mes***REMOVED***ge-bar" class="swagger-ui-wrap">&nbsp;</div>
 <div id="swagger-ui-container" class="swagger-ui-wrap"></div>
-  <script type="text/javascript" src="docs/lib/all.js"></script>
+  <script type="text/javascript" src="docs/lib/shred.bundle.js"></script>
+  <script src='docs/lib/jquery-1.8.0.min.js' type='text/javascript'></script>
+  <script src='docs/lib/jquery.slideto.min.js' type='text/javascript'></script>
+  <script src='docs/lib/jquery.wiggle.min.js' type='text/javascript'></script>
+  <script src='docs/lib/jquery.ba-bbq.min.js' type='text/javascript'></script>
+  <script src='docs/lib/handlebars-1.0.0.js' type='text/javascript'></script>
+  <script src='docs/lib/underscore-min.js' type='text/javascript'></script>
+  <script src='docs/lib/backbone-min.js' type='text/javascript'></script>
+  <script src='docs/lib/swagger.js' type='text/javascript'></script>
+  <script src='docs/lib/swagger-ui.js' type='text/javascript'></script>
+  <script src='docs/lib/highlight.7.3.pack.js' type='text/javascript'></script>
   <script type="text/javascript" src="docs/lib/jquery.noty.packaged.min.js"></script>
   <script type="text/javascript">
     $(function () {
