@@ -634,6 +634,25 @@ class SubscriptionStatus(Resource):
     ],
     responseMes***REMOVED***ges=[
       {
+        "code": 200,
+        "mes***REMOVED***ge":"""<pre>
+        {
+          "data": {
+            "numeroCertificado":'TST123',
+            "numeroTelefono":'50212345678',
+            "nombreCompleto":'Alan Fry',
+            "CUI":'5234612345678',
+            "codigoReclamo":'GT5167',
+            "cobertura":500
+          },
+          "errorCode": null,
+          "errorMes***REMOVED***ge": null,
+          "meta": {
+            "status": "success"
+          }
+        }</pre>"""
+      },
+      {
         "code": 400,
         "mes***REMOVED***ge":"""<pre>
         {
