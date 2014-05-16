@@ -68,7 +68,7 @@ api = swagger.docs(
   produces=["application/json"],
   api_spec_url='/api/specs',
   info=dict(
-    title="Seguros API © Grupo TIR, S.A.",
+    title="© Grupo TIR, S.A.",
     description=apiDescription,
     contact="jdigherob@tir.com.gt",
   )

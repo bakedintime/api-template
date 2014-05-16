@@ -37,7 +37,7 @@ homepage_html = """
 <body>
 <div id='header'>
   <div class="swagger-ui-wrap">
-    <a id="logo" href="http://swagger.wordnik.com">swagger</a>
+    <a id="logo">Seguros API</a>
     <form id='api_selector'>
       <div class='input'><input placeholder="http://example.com/api" id="input_baseUrl" name="baseUrl" type="text"/></div>
       <div class='input'><input di***REMOVED***bled='di***REMOVED***bled' placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>
