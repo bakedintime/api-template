@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import ConfigParser
 import random, hashlib
+import dateutil.parser
 import simplejson as json
-from flask import Flask, redirect, make_response
-from flask.ext.restful import reqparse, request, Api, Resource, fields, marshal
+from flask import Flask, redirect, make_response, request
+from flask.ext.restful import reqparse, Api, Resource, fields, marshal
 from flask_swagger.flask_restful_swagger import swagger
 from flask.ext.httpauth import HTTPBasicAuth
 from werkzeug.contrib.fixers import ProxyFix
@@ -111,7 +112,7 @@ class SubscriptionBillingRequestFields:
     'numeroTelefono':fields.String(),
     'numeroCertificado':fields.String(),
     'montoCobro':fields.Float(),
-    'fechaHora':fields.DateTime()
+    'fechaHora':fields.String(default='2014-05-08T23:41:54.000Z')
   }
 
 @swagger.model
@@ -129,8 +130,7 @@ class SubscriptionCancellationRequestFields:
     'id':fields.Integer(default=None),
     'numeroTelefono':fields.String(),
     'numeroCertificado':fields.String(),
-    'montoCobro':fields.Float(),
-    'fechaHora':fields.DateTime(),
+    'fechaHora':fields.String(default='2014-05-08T23:41:54.000Z'),
     'motivo':fields.String()
   }
 
@@ -272,7 +272,7 @@ def wrap_response(response, status, headers):
 
 class SubscriptionBilling(Resource):
   @swagger.operation(
-    notes="These endpoint can receive from one two many batch requests within the ***REMOVED***me payload. <br/> fechaHora represented in RFC822-formatted datetime string in UTC. " \
+    notes="These endpoint can receive from one two many batch requests within the ***REMOVED***me payload. <br/> fechaHora represented in ISO 8601 datetime string (e.g. 2014-05-08T23:41:54.000Z). " \
           "<br/><br/><b>Note:</b> The field <b>id</b> in the response and request of batch operations is only used for mapping the result of each individual tran***REMOVED***ction. When there is only one tran***REMOVED***ction this field is optional.",
     responseClass=SubscriptionBillResponse,
     nickname='billSubscription',
@@ -441,7 +441,12 @@ class SubscriptionCancellation(Resource):
   """
   @swagger.operation(
     notes="These endpoint can receive from one two many batch requests within the ***REMOVED***me payload. <br/> fechaHora represented in RFC822-formatted datetime string in UTC."  \
-          "<br/><br/><b>Note:</b> The field <b>id</b> in the response and request of batch operations is only used for mapping the result of each individual tran***REMOVED***ction. When there is only one tran***REMOVED***ction this field is optional.",
+    notes=
+    """These endpoint can receive from one two many batch requests within the ***REMOVED***me payload. <br/>
+      fechaHora represented in ISO 8601 datetime string (e.g. 2014-05-08T23:41:54.000Z).<br/><br/>
+      <b>Note:</b> The field <b>id</b> in the response and request of batch operations is only used for mapping the result of each individual tran***REMOVED***ction.
+      When there is only one tran***REMOVED***ction this field is optional.
+
     responseClass=SubscriptionCancellationResponse,
     nickname='cancelSubscription',
     # Parameters can be automatically extracted from URLs (e.g. <string:id>)
