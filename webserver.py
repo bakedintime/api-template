@@ -221,7 +221,7 @@ class SubscriptionCancellationOperationsFields:
 class SubscriptionCancellationResponse:
   """
     The list of batch operations that were evaluated as 
-    cancelation requests.
+    cancellation requests.
   """
   resource_fields = {
     'results':fields.List(fields.Nested(SubscriptionCancellationOperationsFields.resource_fields))
@@ -364,7 +364,7 @@ class SubscriptionBilling(Resource):
       charged to the given subscription.
     """
     args = request.json
-    print args
+    #print args
     choice = random.randint(1,10)
     if ( 1 <= choice < 4 ):
       response = BaseResponseFields(
@@ -440,26 +440,35 @@ class SubscriptionCancellation(Resource):
   """
   """
   @swagger.operation(
-    notes="These endpoint can receive from one two many batch requests within the ***REMOVED***me payload. <br/> fechaHora represented in RFC822-formatted datetime string in UTC."  \
     notes=
     """These endpoint can receive from one two many batch requests within the ***REMOVED***me payload. <br/>
       fechaHora represented in ISO 8601 datetime string (e.g. 2014-05-08T23:41:54.000Z).<br/><br/>
       <b>Note:</b> The field <b>id</b> in the response and request of batch operations is only used for mapping the result of each individual tran***REMOVED***ction.
       When there is only one tran***REMOVED***ction this field is optional.
 
+      $ curl -H "Authorization: Basic dGlnbzp0MyR0dXMzcg==" -H "Content-Type:application/json" 
+      -d "{'results': [{'id': '0','payload': {'data': {'mes***REMOVED***ge':'No existe certificado para este nmero.'},'errorCode': null,'errorMes***REMOVED***ge': null,'meta': {'status': 'fail'}}}]}"
+      localhost:5000/subscriptions/cancel
+    """,
     responseClass=SubscriptionCancellationResponse,
     nickname='cancelSubscription',
     # Parameters can be automatically extracted from URLs (e.g. <string:id>)
     # but you could also override them here, or add other parameters.
     parameters=[
       {
-        "name": "requests",
-        "description": "Cancelation batch request",
+        "name": "body",
+        "description": "Cancellation batch request",
         "required": True,
-        "allowMultiple": True,
+        "allowMultiple": False,
         "dataType": SubscriptionCancellationRequest.__name__,
         "paramType": "body"
       },
+    ],
+    consumes =[
+      "application/json"
+    ],
+    produces = [
+      "application/json"
     ],
     responseMes***REMOVED***ges=[
       {
