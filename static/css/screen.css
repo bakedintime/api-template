@@ -1089,3 +1089,7 @@ table {
   -khtml-border-radius: 4px;
   border-radius: 4px;
 }
+
+em{
+  font-style:italic;
+}

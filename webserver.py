@@ -112,7 +112,7 @@ class SubscriptionBillingRequestFields:
     'numeroTelefono':fields.String(),
     'numeroCertificado':fields.String(),
     'montoCobro':fields.Float(),
-    'fechaHora':fields.String(default='2014-05-08T23:41:54.000Z')
+    'fechaHora':fields.String()
   }
 
 @swagger.model
@@ -130,7 +130,7 @@ class SubscriptionCancellationRequestFields:
     'id':fields.Integer(default=None),
     'numeroTelefono':fields.String(),
     'numeroCertificado':fields.String(),
-    'fechaHora':fields.String(default='2014-05-08T23:41:54.000Z'),
+    'fechaHora':fields.String(),
     'motivo':fields.String()
   }
 
@@ -438,16 +438,19 @@ class SubscriptionBilling(Resource):
 
 class SubscriptionCancellation(Resource):
   """
+    Documentation of Subscription cancelation's endpoint
   """
   @swagger.operation(
     notes=
     """These endpoint can receive from one two many batch requests within the ***REMOVED***me payload. <br/>
-      fechaHora represented in ISO 8601 datetime string (e.g. 2014-05-08T23:41:54.000Z).<br/><br/>
+      <em>fechaHora</em> represented in ISO 8601 datetime string (e.g. 2014-05-08T23:41:54.000Z).<br/><br/>
       <b>Note:</b> The field <b>id</b> in the response and request of batch operations is only used for mapping the result of each individual tran***REMOVED***ction.
       When there is only one tran***REMOVED***ction this field is optional.
-
-      $ curl -H "Authorization: Basic dGlnbzp0MyR0dXMzcg==" -H "Content-Type:application/json" 
-      -d "{'results': [{'id': '0','payload': {'data': {'mes***REMOVED***ge':'No existe certificado para este nmero.'},'errorCode': null,'errorMes***REMOVED***ge': null,'meta': {'status': 'fail'}}}]}"
+      <br/>
+      <br/>
+      <b>Curl Example</b> (with test user and password):  <br/>
+      $ curl -H "Authorization: Basic dGlnbzp0MyR0dXMzcg==" -H "Content-Type:application/json" <br/>
+      -d "{'results': [{'id': '0','payload': {'data': {'mes***REMOVED***ge':'No existe certificado para este nmero.'},'errorCode': null,'errorMes***REMOVED***ge': null,'meta': {'status': 'fail'}}}]}" <br/>
       localhost:5000/subscriptions/cancel
     """,
     responseClass=SubscriptionCancellationResponse,
@@ -845,6 +848,7 @@ class SubscriptionStatus(Resource):
 
 class SubscriptionClaim(Resource):
   """
+    Documentation for subscription's claim endpoint
   """
   def __init__(self):
     self.reqparse = reqparse.RequestParser()
@@ -995,6 +999,7 @@ class SubscriptionClaim(Resource):
 
 class SubscriptionChangeNumber(Resource):
   """
+    Documentation for subscription's change of number endpoint
   """
   def __init__(self):
     self.reqparse = reqparse.RequestParser()
