@@ -48,7 +48,7 @@ apiDescription = """<p>REST API description of insurance management. <br/> All r
   </form>
   <hr/>
   <p>
-    <em>powered by <a href="swagger.wordnik.com">Swagger</a> </em>
+    <em>powered by <a href="http://swagger.wordnik.com">Swagger</a> </em>
   </p>
   """
 
