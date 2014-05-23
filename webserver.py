@@ -550,39 +550,61 @@ class SubscriptionCancellation(Resource):
       Evaluate one or more cancel requests to be 
       issued to the given subscription.
     """
-    args = request.json
-    print args
-    choice = random.randint(1,10)
-    if ( 1 <= choice < 4 ):
-      response = BaseResponseFields(
-        status='success',
-        data={
-          "results": [
-            {
-              "id": "0",
-              "payload": {
-                "data": {"mes***REMOVED***ge":"Suscripción cancelada éxito***REMOVED***mente."},
+    response_codes = {
+      2:'TF0002',
+      3:'TF0003',
+      4:'TF0004',
+      0:'TF0005',
+    }
+    response_mes***REMOVED***ge = {
+      1:u'Suscripción cancelada éxito***REMOVED***mente.',
+      2:u'El número de certificado y número de teléfono no coinciden.',
+      3:u'El certificado asociado al número no se encuentra en un estado válido para su cancelación. Puede haber sido cancelado anteriormente.',
+      4:u'El certificado no existe.',
+      0:u'La suscripción no pudo ser cancelada. Intente de nuevo o contacte a servicio técnico.',
+    }
+    responses = []
+    requests = json.loads(request.data)
+    operations = requests["requests"]
+    for operation in operations:
+      noCertificado = operation["numeroCertificado"]
+      noTelefono = operation["numeroTelefono"]
+      motivo = operation["motivo"]
+      _id = operation["id"]
+      # Validate that fields aren't empty
+      if (not motivo) or (not noCertificado) or (not noTelefono) or (not _id):
+        payload = {
+          "data": {
+            "mes***REMOVED***ge":"Campos inválidos. Todos los campos son nece***REMOVED***rios para realizar la operación.",
+            "code":"TF0001"
+          },
+          "errorCode": "null",
+          "errorMes***REMOVED***ge": "null",
+          "meta": {
+            "status": "fail"
+          }
+        }
+      else:
+        try:
+          fechaHora = dateutil.parser.parse(operation["fechaHora"])
+          try:
+            result = msdriver.scheduled_certificate_cancellation(noCertificado, noTelefono, motivo, fechaHora)
+            result = result[0]
+            if result == 1:
+              payload = {
+                "data": {"mes***REMOVED***ge":response_mes***REMOVED***ge[result]},
                 "errorCode": "null",
                 "errorMes***REMOVED***ge": "null",
                 "meta": {
                   "status": "success"
                 }
               }
-            }
-          ]
-        }
-      )
-      status = 200
-    elif (4 <= choice < 7):
-      response = BaseResponseFields(
-        status='success',
-        data={
-          "results": [
-            {
-              "id": "0",
-              "payload": {
+              status=200
+            else:
+              payload = {
                 "data": {
-                  "mes***REMOVED***ge":"Mótivo no definido."
+                  "code":response_codes[result],
+                  "mes***REMOVED***ge":response_mes***REMOVED***ge[result]
                 },
                 "errorCode": "null",
                 "errorMes***REMOVED***ge": "null",
@@ -590,42 +612,46 @@ class SubscriptionCancellation(Resource):
                   "status": "fail"
                 }
               }
+              status=400
+          except Exception,e:
+            print str(e)
+            response = BaseResponseFields(
+              status='error',
+              data=None,
+              errorMes***REMOVED***ge=u'Error Interno.',
+              errorCode='TE0001'
+            )
+            status = 500
+            return wrap_response(response, status, {'Content-Type':'application/json'})
+        except Exception, e:
+          print str(e)
+          payload = {
+            "data": {
+              "mes***REMOVED***ge":"Formato de fecha inválida. Validar que el formato de la fecha sea correspondiente al ISO8601.",
+              "code":"TF0006"
+            },
+            "errorCode": "null",
+            "errorMes***REMOVED***ge": "null",
+            "meta": {
+              "status": "fail"
             }
-          ]
-        }
-      )
-      status = 404
-    elif (7 <= choice < 8):
-      response = BaseResponseFields(
-        status='fail',
-        data={
-          "results": [
-            {
-              "id": "0",
-              "payload": {
-                "data": {
-                  "mes***REMOVED***ge":"Fecha de bloqueo no procede."
-                },
-                "errorCode": "null",
-                "errorMes***REMOVED***ge": "null",
-                "meta": {
-                  "status": "fail"
-                }
-              }
-            }
-          ]
-        }
-      )
-      status = 400  
-    else:
-      response = BaseResponseFields(
-        status='error',
-        data=None,
-        errorMes***REMOVED***ge=u'El servicio no está disponible en este momento.',
-        errorCode='TE0001'
-      )
-      status = 500
-    return wrap_response(response, status, {'Content-Type':'application/json'})
+          }
+         
+      response = {
+        "id":_id,
+        "payload":payload
+      }
+      responses.append(response)
+    compound_response = BaseResponseFields(
+      status='success',
+      data={
+        "results":responses
+      },
+      errorMes***REMOVED***ge=None,
+      errorCode=None
+    )
+    status = 200
+    return wrap_response(compound_response, status, {'Content-Type':'application/json'})
 
 class SubscriptionStatus(Resource):
   """

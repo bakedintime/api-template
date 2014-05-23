@@ -181,3 +181,27 @@ class MSDriver():
             return False
         finally:
             cursor.close()
+
+    def scheduled_certificate_cancellation(self, noCertificado, noTelefono, motivo, fechaHora):
+        cursor = self.segurosDB.cursor()
+        try:
+            query = "exec %s ?, ?, ?, ?" % (self.settings.get('SegurosDB','scheduledCertificateCancellation'))
+            self.logger.debug('Executing query %s with param: %s, %s, %s, %s' % (query, noCertificado, noTelefono, motivo, fechaHora))
+            cursor.execute(
+                query,
+                unicode(noCertificado).encode('utf8'),
+                unicode(noTelefono).encode('utf8'),
+                unicode(motivo).encode('utf8'),
+                (str(fechaHora).split('+')[0]).encode('utf8')
+            )
+            row = cursor.fetchone()
+            if row:
+                return row
+            else:
+                return None
+        except Exception,e:
+            self.logger.error(str(e), exc_info=True)
+            return False
+        finally:
+            cursor.close()
+            cursor.close()
