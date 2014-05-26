@@ -380,10 +380,33 @@ class SubscriptionBilling(Resource):
     requests = json.loads(request.data)
     operations = requests["requests"]
     for operation in operations:
-      noCertificado = operation["numeroCertificado"]
-      noTelefono = operation["numeroTelefono"]
-      montoCobro = operation["montoCobro"]
-      _id = operation["id"]
+      # If json payload from request 
+      # isn't well formed return bad request
+      try:
+        noCertificado = operation["numeroCertificado"]
+        noTelefono = operation["numeroTelefono"]
+        montoCobro = operation["montoCobro"]
+        _id = operation["id"]
+      except Exception,e:
+        print str(e)
+        payload = {
+          "data": {
+            "mes***REMOVED***ge":"Campos inválidos. Todos los campos son nece***REMOVED***rios para realizar la operación.",
+            "code":"TF0001"
+          },
+          "errorCode": "null",
+          "errorMes***REMOVED***ge": "null",
+          "meta": {
+            "status": "fail"
+          }
+        }
+        response = {
+          "id":operation["id"],
+          "payload":payload
+        }
+        responses.append(response)
+        break
+
       # Validate that fields aren't empty
       if (not montoCobro) or (not noCertificado) or (not noTelefono) or (not _id):
         payload = {
@@ -597,10 +620,31 @@ class SubscriptionCancellation(Resource):
     requests = json.loads(request.data)
     operations = requests["requests"]
     for operation in operations:
-      noCertificado = operation["numeroCertificado"]
-      noTelefono = operation["numeroTelefono"]
-      motivo = operation["motivo"]
-      _id = operation["id"]
+      try:
+        noCertificado = operation["numeroCertificado"]
+        noTelefono = operation["numeroTelefono"]
+        motivo = operation["motivo"]
+        _id = operation["id"]
+      except Exception,e:
+        print str(e)
+        payload = {
+          "data": {
+            "mes***REMOVED***ge":"Campos inválidos. Todos los campos son nece***REMOVED***rios para realizar la operación.",
+            "code":"TF0001"
+          },
+          "errorCode": "null",
+          "errorMes***REMOVED***ge": "null",
+          "meta": {
+            "status": "fail"
+          }
+        }
+        response = {
+          "id":operation["id"],
+          "payload":payload
+        }
+        responses.append(response)
+        break
+
       # Validate that fields aren't empty
       if (not motivo) or (not noCertificado) or (not noTelefono) or (not _id):
         payload = {
@@ -892,6 +936,7 @@ class SubscriptionStatus(Resource):
         status = 400  
       return wrap_response(response, status, {'Content-Type':'application/json'})
     except Exception, e:
+      print str(e)
       response = BaseResponseFields(
         status='error',
         data=None,
@@ -899,7 +944,6 @@ class SubscriptionStatus(Resource):
         errorCode= response_codes[5]
       )
       status = 500
-      print str(e)
       return wrap_response(response, status, {'Content-Type':'application/json'})
 
 class SubscriptionClaim(Resource):
