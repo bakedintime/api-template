@@ -272,8 +272,17 @@ def wrap_response(response, status, headers):
 
 class SubscriptionBilling(Resource):
   @swagger.operation(
-    notes="These endpoint can receive from one two many batch requests within the ***REMOVED***me payload. <br/> fechaHora represented in ISO 8601 datetime string (e.g. 2014-05-08T23:41:54.000Z). " \
-          "<br/><br/><b>Note:</b> The field <b>id</b> in the response and request of batch operations is only used for mapping the result of each individual tran***REMOVED***ction. When there is only one tran***REMOVED***ction this field is optional.",
+    notes="""These endpoint can receive from one two many batch requests within the ***REMOVED***me payload. <br/>
+      fechaHora represented in ISO 8601 datetime string (e.g. 2014-05-08T23:41:54.000Z). <br/>
+      <br/>
+      <b>Note:</b> The field <b>id</b> in the response and request of batch operations is only used for mapping the result of each individual tran***REMOVED***ction. When there is only one tran***REMOVED***ction this field is optional.
+      <br/>
+      <br/>
+      <b>Curl Example</b> (with test user and password):  <br/>
+      $ curl -H "Authorization: Basic dGlnbzp0MyR0dXMzcg==" -H "Content-Type:application/json" <br/>
+      -d "{'requests': [{'numeroCertificado': 'GT4958','montoCobro': 5.20,'numeroTelefono': '50255285798','fechaHora': '2014-05-08T23:41:54.000Z','id': 1}]}" <br/>
+      localhost:5000/subscriptions/charge
+    """,
     responseClass=SubscriptionBillResponse,
     nickname='billSubscription',
     parameters=[
@@ -503,7 +512,7 @@ class SubscriptionCancellation(Resource):
       <br/>
       <b>Curl Example</b> (with test user and password):  <br/>
       $ curl -H "Authorization: Basic dGlnbzp0MyR0dXMzcg==" -H "Content-Type:application/json" <br/>
-      -d "{'results': [{'id': '0','payload': {'data': {'mes***REMOVED***ge':'No existe certificado para este nmero.'},'errorCode': null,'errorMes***REMOVED***ge': null,'meta': {'status': 'fail'}}}]}" <br/>
+      -d "{'requests': [{'numeroCertificado': 'GT4958','motivo': 'M0003','numeroTelefono': '50255285798','fechaHora': '2014-05-08T23:41:54.000Z','id': 1}]}" <br/>
       localhost:5000/subscriptions/cancel
     """,
     responseClass=SubscriptionCancellationResponse,
