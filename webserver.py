@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import ConfigParser
-import random, hashlib
+import hashlib
 import dateutil.parser
 import simplejson as json
 from flask import Flask, redirect, make_response, request
