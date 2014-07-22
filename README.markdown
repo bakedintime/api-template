@@ -78,3 +78,14 @@ Troubleshooting
 If virtualenv venv fails to execute with an error like:
     Filename x does not start with any of these prefixes.
 Try removing the PYTHONPATH variable from Environment variables.
+
+If there are problems with pyodbc like 
+        
+        Traceback (most recent call last):
+          File "<stdin>", line 1, in <module>
+          File "build/bdist.linux-i686/egg/pyodbc.py", line 7, in <module>
+          File "build/bdist.linux-i686/egg/pyodbc.py", line 6, in __bootstrap__
+        ImportError: libodbc.so.2: cannot open shared object file: No such file or directory
+
+run: 
+        sudo apt-get update && sudo apt-get install unixodbc-dev libmyodbc
