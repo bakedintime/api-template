@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import ConfigParser
 import hashlib
+import logging, logging.handlers
 import dateutil.parser
 import simplejson as json
 from flask import Flask, redirect, make_response, request
@@ -9,11 +10,29 @@ from flask_swagger.flask_restful_swagger import swagger
 from flask.ext.httpauth import HTTPBasicAuth
 from werkzeug.contrib.fixers import ProxyFix
 from models import MSDriver
-
 from msorm.exceptions.QueryIntegrityException import QueryIntegrityException
 
 app = Flask(__name__, static_url_path='/api/docs')
 auth = HTTPBasicAuth()
+
+# Initializes settings file.
+settings = ConfigParser.SafeConfigParser()
+settings_path = 'conf/settings.cfg'
+settings.read(settings_path)
+
+# Creates logging configuration.
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+# Assign handler to configure logger's format.
+handler = logging.handlers.RotatingFileHandler(
+    settings.get('Logging','logpath'),
+    maxBytes=settings.get('Logging','maxBytes'),
+    backupCount=settings.get('Logging','backupCount')
+)
+handler.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(mes***REMOVED***ge)s')
+handler.setFormatter(formatter)
+app.logger.addHandler(handler)
 
 users = {
   'tigo':'94c6c2243936b5472836ac7077830f5e' #t3$tus3r
