@@ -64,48 +64,42 @@ class MSDriver():
     # Stored procedures
 
     def is_payment_enabled(self, telephone, fechaBloqueo, estaBloqueado):
-        cursor = self.segurosDB.cursor()
-        query = "exec %s ?, ?, ?" % (self.settings.get('SegurosDB','isPaymentEnabled'))
-        self.logger.debug('Executing query %s with param: %s, %s, %s' % (query, telephone, fechaBloqueo, estaBloqueado))
-        cursor.execute(
-            query,
-            unicode(telephone).encode('utf8'),
-            unicode(fechaBloqueo).encode('utf8'),
-            estaBloqueado
-        )
-        row = cursor.fetchone()
-        cursor.close()
-        if row:
-            return row
-        else:
+        qm = QueryManager(self.settings_path)
+        try:
+            query = "exec %s ?, ?, ?" % (self.settings.get('DBSeguros','isPaymentEnabled'))
+            self.logger.debug('Executing query %s with param: %s, %s, %s' % (query, telephone, fechaBloqueo, estaBloqueado))
+            row = qm.query_all('DBSeguros', query, params=[unicode(telephone).encode('utf8'), unicode(fechaBloqueo).encode('utf8'), estaBloqueado])
+            if row:
+                return row
+            else:
+                return None
+        except Exception,e:
+            self.logger.error(str(e), exc_info=True)
             return None
+        finally:
+            qm.disconnect()
 
     def is_blocked_IMEI(self, number):
         return False
 
     def exists_certificate(self, number, _type):
-        cursor = self.segurosDB.cursor()
+        qm = QueryManager(self.settings_path)
         try:
             query = "exec %s ?" % (self.settings.get('DBSeguros','getAllCertificates'))
             self.logger.debug('Executing query %s with param: %s' % (query, number))
-            cursor.execute(
-                query,
-                unicode(number).encode('utf8'),
-            )
-            rows = cursor.fetchall()
+            rows = qm.query_all('DBSeguros', query, params=[number])
             certificates = {}
             for row in rows:
-                certificates[row[0]] = row[1]
+                certificates[row['codigo']] = row['descripcion']
             if _type in certificates:
                 return True
             else:
                 return False
-
         except Exception,e:
             self.logger.error(str(e), exc_info=True)
             return False
         finally:
-            cursor.close()
+            qm.disconnect()
 
     def change_number(self, imei, number):
         cursor = self.segurosDB.cursor()

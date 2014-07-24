@@ -920,11 +920,13 @@ class SubscriptionStatus(Resource):
     }
     try:
       if not msdriver.exists_certificate(numeroTelefono,'robos'):
+        response_mes***REMOVED***ge = u'No existe certificado para el número %s.' % (numeroTelefono)
+        app.logger.info(response_mes***REMOVED***ge)
         response = BaseResponseFields(
           status='fail',
           data={
             'code':'TF0001',
-            'mes***REMOVED***ge':(u'No existe certificado para el número %s.' % (numeroTelefono))
+            'mes***REMOVED***ge':response_mes***REMOVED***ge
           }
         )
         status = 404
@@ -932,40 +934,40 @@ class SubscriptionStatus(Resource):
       # Obtener con el API si el telefono esta bloqueado y en que fecha se efectuo
       # para mandarlo al metodo de is_payment_enabled()
       # models.is_blocked_IMEI
-      result = msdriver.is_payment_enabled(numeroTelefono, '2014/05/02', 1)
-      if result[0] == 1:
+      result = msdriver.is_payment_enabled(numeroTelefono, '2014/05/02', 1)[0]
+      if result['response'] == 1:
         response = BaseResponseFields(
           status='success',
           data={
-            'numeroCertificado':result[1],
-            'numeroTelefono':result[2],
-            'nombreCompleto':result[3],
-            'CUI':result[4],
-            'codigoReclamo':result[5],
-            'cobertura':result[6]
+            'numeroCertificado':result['idCertificado'],
+            'numeroTelefono':result['numeroTelefono'],
+            'nombreCompleto':result['nombreCompleto'],
+            'CUI':result['CUI'],
+            'codigoReclamo':result['codigoReclamo'],
+            'cobertura':result['cobertura']
           }
         )
         status = 200
-      elif result[0] == 0:
+      elif result['response'] == 0:
         response = BaseResponseFields(
           status='error',
           data=None,
-          errorMes***REMOVED***ge= response_mes***REMOVED***ge[result[0]],
-          errorCode= response_codes[result[0]]
+          errorMes***REMOVED***ge= response_mes***REMOVED***ge[result['response']],
+          errorCode= response_codes[result['response']]
         )
         status = 500
       else:
         response = BaseResponseFields(
           status='fail',
           data={
-            'code': response_codes[result[0]],
-            'mes***REMOVED***ge': response_mes***REMOVED***ge[result[0]],
+            'code': response_codes[result['response']],
+            'mes***REMOVED***ge': response_mes***REMOVED***ge[result['response']],
           }
         )
         status = 400  
       return wrap_response(response, status, {'Content-Type':'application/json'})
     except Exception, e:
-      print str(e)
+      app.logger.error(str(e), exc_info=True)
       response = BaseResponseFields(
         status='error',
         data=None,
