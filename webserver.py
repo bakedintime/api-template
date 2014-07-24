@@ -10,6 +10,7 @@ from flask.ext.httpauth import HTTPBasicAuth
 from werkzeug.contrib.fixers import ProxyFix
 from models import MSDriver
 
+from msorm.exceptions.QueryIntegrityException import QueryIntegrityException
 
 app = Flask(__name__, static_url_path='/api/docs')
 auth = HTTPBasicAuth()

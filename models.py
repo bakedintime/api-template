@@ -1,5 +1,5 @@
-import re
-import pyodbc
+from msorm.QueryManager import QueryManager
+from msorm.exceptions.QueryIntegrityException import QueryIntegrityException
 import logging
 import ConfigParser
 import logging.handlers
@@ -8,20 +8,21 @@ class MSDriver():
     def __init__(self):
         # Initializes settings file.
         self.settings = ConfigParser.SafeConfigParser()
-        self.settings.read('conf/settings.cfg')
+        self.settings_path = 'conf/settings.cfg'
+        self.settings.read(self.settings_path)
 
         # Connects to mes***REMOVED***ges database.
-        self.segurosDB = pyodbc.connect(
+        """self.segurosDB = pyodbc.connect(
             'DSN=%s;UID=%s;PWD=%s;DATABASE=%s' % 
             (
-                self.settings.get('SegurosDB', 'dsn'),
-                self.settings.get('SegurosDB', 'uid'),
-                self.settings.get('SegurosDB', 'pwd'),
-                self.settings.get('SegurosDB', 'database')
+                self.settings.get('DBSeguros', 'dsn'),
+                self.settings.get('DBSeguros', 'uid'),
+                self.settings.get('DBSeguros', 'pwd'),
+                self.settings.get('DBSeguros', 'database')
             ), 
             autocommit=True
-        )
-
+        )"""
+        
         # Creates logging configuration.
         logging.basicConfig(level=logging.DEBUG)
         self.logger = logging.getLogger(__name__)
@@ -76,7 +77,7 @@ class MSDriver():
 
     def get_response_mes***REMOVED***ge(self, state, motif):
         cursor = self.segurosDB.cursor()
-        query = "exec %s ?, ?, ?" % self.settings.get('SegurosDB','getResponseMes***REMOVED***ge')
+        query = "exec %s ?, ?, ?" % self.settings.get('DBSeguros','getResponseMes***REMOVED***ge')
         self.logger.debug('Executing query %s with params: %s, %s, %s' %
             (query, state, motif, '1778')
         )
@@ -120,7 +121,7 @@ class MSDriver():
     def exists_certificate(self, number, _type):
         cursor = self.segurosDB.cursor()
         try:
-            query = "exec %s ?" % (self.settings.get('SegurosDB','getAllCertificates'))
+            query = "exec %s ?" % (self.settings.get('DBSeguros','getAllCertificates'))
             self.logger.debug('Executing query %s with param: %s' % (query, number))
             cursor.execute(
                 query,
@@ -144,7 +145,7 @@ class MSDriver():
     def change_number(self, imei, number):
         cursor = self.segurosDB.cursor()
         try:
-            query = "exec %s ?, ?" % (self.settings.get('SegurosDB','changeNumber'))
+            query = "exec %s ?, ?" % (self.settings.get('DBSeguros','changeNumber'))
             self.logger.debug('Executing query %s with param: %s, %s' % (query, imei, number))
             cursor.execute(
                 query,
@@ -165,7 +166,7 @@ class MSDriver():
     def claim_subscription(self, codigoReclamo):
         cursor = self.segurosDB.cursor()
         try:
-            query = "exec %s ?" % (self.settings.get('SegurosDB','claimSubscription'))
+            query = "exec %s ?" % (self.settings.get('DBSeguros','claimSubscription'))
             self.logger.debug('Executing query %s with param: %s' % (query, codigoReclamo))
             cursor.execute(
                 query,
@@ -185,7 +186,7 @@ class MSDriver():
     def scheduled_certificate_cancellation(self, noCertificado, noTelefono, motivo, fechaHora):
         cursor = self.segurosDB.cursor()
         try:
-            query = "exec %s ?, ?, ?, ?" % (self.settings.get('SegurosDB','scheduledCertificateCancellation'))
+            query = "exec %s ?, ?, ?, ?" % (self.settings.get('DBSeguros','scheduledCertificateCancellation'))
             self.logger.debug('Executing query %s with param: %s, %s, %s, %s' % (query, noCertificado, noTelefono, motivo, fechaHora))
             cursor.execute(
                 query,
@@ -208,7 +209,7 @@ class MSDriver():
     def scheduled_certificate_charge(self, noCertificado, noTelefono, montoCobro, fechaHora):
         cursor = self.segurosDB.cursor()
         try:
-            query = "exec %s ?, ?, ?, ?" % (self.settings.get('SegurosDB','scheduledCertificateCharge'))
+            query = "exec %s ?, ?, ?, ?" % (self.settings.get('DBSeguros','scheduledCertificateCharge'))
             self.logger.debug('Executing query %s with param: %s, %s, %s, %s' % (query, noCertificado, noTelefono, montoCobro, fechaHora))
             cursor.execute(
                 query,
