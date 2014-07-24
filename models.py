@@ -121,24 +121,23 @@ class MSDriver():
             qm.disconnect()
 
     def claim_subscription(self, codigoReclamo):
-        cursor = self.segurosDB.cursor()
+        qm = QueryManager(self.settings_path)
         try:
             query = "exec %s ?" % (self.settings.get('DBSeguros','claimSubscription'))
             self.logger.debug('Executing query %s with param: %s' % (query, codigoReclamo))
-            cursor.execute(
-                query,
-                unicode(codigoReclamo).encode('utf8')
-            )
-            row = cursor.fetchone()
+            row = qm.query_one('DBSeguros', query, params=[unicode(codigoReclamo).encode('utf8')])
             if row:
                 return row
             else:
-                return None
+                return False
+        except QueryIntegrityException, qie:
+            self.logger.error(str(qie), exc_info=True)
+            raise QueryIntegrityException(str(qie))
         except Exception,e:
             self.logger.error(str(e), exc_info=True)
             return False
         finally:
-            cursor.close()
+            qm.disconnect()
 
     def scheduled_certificate_cancellation(self, noCertificado, noTelefono, motivo, fechaHora):
         cursor = self.segurosDB.cursor()

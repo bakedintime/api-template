@@ -1039,7 +1039,7 @@ class SubscriptionClaim(Resource):
         "mes***REMOVED***ge":"""<pre>
         {
           "data": {
-            "mes***REMOVED***ge": "No existe código de reclamo.",
+            "mes***REMOVED***ge": "El código de reclamo no existe.",
             "code": "TF0001"
           },
           "errorCode": null,
@@ -1099,11 +1099,11 @@ class SubscriptionClaim(Resource):
       return wrap_response(response, status, {'Content-Type':'application/json'})
     try:
       result = msdriver.claim_subscription(args.codigoReclamo)
-      if result[0] != 'a' and result[0] != 'b':
+      if result != 'a' and result != 'b':
         response = BaseResponseFields(
           status='success',
           data={
-            'cobertura': result[0]
+            'cobertura': result
           }
         )
         status = 200
@@ -1111,13 +1111,25 @@ class SubscriptionClaim(Resource):
         response = BaseResponseFields(
           status='fail',
           data={
-            'code':response_codes[result[0]],
-            'mes***REMOVED***ge':response_mes***REMOVED***ge[result[0]],
+            'code':response_codes[result],
+            'mes***REMOVED***ge':response_mes***REMOVED***ge[result],
           }
         )
         status = 400 
       return wrap_response(response, status, {'Content-Type':'application/json'})
+    except QueryIntegrityException, qie:
+      app.logger.error(str(qie), exc_info=True)
+      response = BaseResponseFields(
+        status='error',
+        data={
+          'code':'TE0002',
+          'mes***REMOVED***ge':u'Error interno'
+        }
+      )
+      status = 400
+      return wrap_response(response, status, {'Content-Type':'application/json'})
     except Exception, e:
+      app.logger.error(str(e), exc_info=True)
       response = BaseResponseFields(
         status='error',
         data=None,
@@ -1125,7 +1137,6 @@ class SubscriptionClaim(Resource):
         errorCode= 'TE0002'
       )
       status = 500
-      print str(e)
       return wrap_response(response, status, {'Content-Type':'application/json'})
 
 class SubscriptionChangeNumber(Resource):
@@ -1192,7 +1203,7 @@ class SubscriptionChangeNumber(Resource):
         "mes***REMOVED***ge":"""<pre>{
           "data": {
             "mes***REMOVED***ge": "El número enviado ya tiene otro IMEI asignado",
-            "code": "TF0003"
+            "code": "TF0002"
           },
           "errorCode": null,
           "errorMes***REMOVED***ge": null,
@@ -1283,7 +1294,7 @@ class SubscriptionChangeNumber(Resource):
       response = BaseResponseFields(
         status='fail',
         data={
-          'code':'TF0003',
+          'code':'TF0002',
           'mes***REMOVED***ge':u'El número enviado ya tiene otro IMEI asignado'
         }
       )
