@@ -37,41 +37,6 @@ class MSDriver():
         handler.setFormatter(formatter)
         self.logger.addHandler(handler)
 
-    def run_query(self, query, params=None, nonQuery=True):
-        # TODO
-        # support multiple statements with rollback functionality
-        # This will be implemented on v1.2 of models module
-        cursor = self.segurosDB.cursor()
-        try:
-            if params:
-                # Check that equal number of parameter placeholders are given
-                placeholders = [m.start() for m in re.finditer('\?',query)]
-                if len(placeholders) == len(params):
-                    if nonQuery:
-                        cursor.execute(query, *params)
-                        return True
-                    else:
-                        cursor.execute(query, *params)
-                        rows = cursor.fetchall()
-                        cursor.close()
-                        return rows
-                else:
-                    raise Exception('Given unequal length of parameter placeholders and parameters to query.')
-            else:
-                if nonQuery:
-                    cursor.execute(query)
-                    return True
-                else:
-                    cursor.execute(query)
-                    rows = cursor.fetchall()
-                    cursor.close()
-                    return rows
-        except Exception, e:
-            # Catch Integrity errors and other exceptions
-            cursor.close()
-            self.logger.debug('Exception while running query %s with params %s, %s' % (query, params, str(e)))
-            return False
-
     def get_connection(self):
         return self.segurosDB.cursor()
 
