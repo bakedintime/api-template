@@ -102,25 +102,23 @@ class MSDriver():
             qm.disconnect()
 
     def change_number(self, imei, number):
-        cursor = self.segurosDB.cursor()
+        qm = QueryManager(self.settings_path)
         try:
             query = "exec %s ?, ?" % (self.settings.get('DBSeguros','changeNumber'))
             self.logger.debug('Executing query %s with param: %s, %s' % (query, imei, number))
-            cursor.execute(
-                query,
-                unicode(imei).encode('utf8'),
-                unicode(number).encode('utf8')
-            )
-            row = cursor.fetchone()
+            row = qm.query_one('DBSeguros', query, params=[unicode(imei).encode('utf8'),unicode(number).encode('utf8')])
             if row:
-                return row
+                return row==1
             else:
-                return None
+                return False
+        except QueryIntegrityException,qie:
+            self.logger.error(str(qie), exc_info=True)
+            raise QueryIntegrityException(str(qie))
         except Exception,e:
             self.logger.error(str(e), exc_info=True)
             return False
         finally:
-            cursor.close()
+            qm.disconnect()
 
     def claim_subscription(self, codigoReclamo):
         cursor = self.segurosDB.cursor()

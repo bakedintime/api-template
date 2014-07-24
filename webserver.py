@@ -1187,13 +1187,12 @@ class SubscriptionChangeNumber(Resource):
           }
         }</pre>"""
       },
-      {
-        "code": 400,
-        "mes***REMOVED***ge":"""<pre>
-        {
+      { 
+        "code":400,
+        "mes***REMOVED***ge":"""<pre>{
           "data": {
-            "mes***REMOVED***ge": "Los campos de IMEI y numeroTelefono no deben estar vacíos.",
-            "code": "TF0001"
+            "mes***REMOVED***ge": "El número enviado ya tiene otro IMEI asignado",
+            "code": "TF0003"
           },
           "errorCode": null,
           "errorMes***REMOVED***ge": null,
@@ -1203,11 +1202,11 @@ class SubscriptionChangeNumber(Resource):
         }</pre>"""
       },
       {
-        "code": 404,
+        "code": 400,
         "mes***REMOVED***ge":"""<pre>
         {
           "data": {
-            "mes***REMOVED***ge": "Este número no existe.",
+            "mes***REMOVED***ge": "Los campos de IMEI y numeroTelefono no deben estar vacíos.",
             "code": "TF0001"
           },
           "errorCode": null,
@@ -1260,8 +1259,8 @@ class SubscriptionChangeNumber(Resource):
       status = 400
       return wrap_response(response, status, {'Content-Type':'application/json'})
     try:
-      result = msdriver.change_number(args.IMEI, args.numeroTelefono)
-      if result[0] == 1:
+      was_success = msdriver.change_number(args.IMEI, args.numeroTelefono)
+      if was_success:
         response = BaseResponseFields(
           status='success',
           data={
@@ -1279,7 +1278,19 @@ class SubscriptionChangeNumber(Resource):
         )
         status = 404
       return wrap_response(response, status, {'Content-Type':'application/json'})
+    except QueryIntegrityException, qie:
+      app.logger.error(str(qie), exc_info=True)
+      response = BaseResponseFields(
+        status='fail',
+        data={
+          'code':'TF0003',
+          'mes***REMOVED***ge':u'El número enviado ya tiene otro IMEI asignado'
+        }
+      )
+      status = 400
+      return wrap_response(response, status, {'Content-Type':'application/json'})
     except Exception, e:
+      app.logger.error(str(e), exc_info=True)
       response = BaseResponseFields(
         status='error',
         data=None,
@@ -1287,7 +1298,6 @@ class SubscriptionChangeNumber(Resource):
         errorCode= 'TE0002'
       )
       status = 500
-      print str(e)
       return wrap_response(response, status, {'Content-Type':'application/json'})
 
 # Api description
