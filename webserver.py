@@ -1317,7 +1317,7 @@ def after(response):
     response.headers.add('Access-Control-Allow-Headers',
                          'Content-Type, X-Requested-With')
     response.headers.add('Access-Control-Max-Age', '1728000')
-    
+    response.headers.add('Server', 'X-Server')
     return response
 
 @app.route('/api', endpoint='api-docs')
