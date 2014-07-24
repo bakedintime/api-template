@@ -83,7 +83,6 @@ msdriver = MSDriver()
 api = swagger.docs(
   Api(app),
   apiVersion='0.1.0',
-  #***REMOVED***.200.34
   basePath='http://'+settings.get('API','DBG_HOST'),
   resourcePath='/',
   produces=["application/json"],

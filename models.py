@@ -5,6 +5,9 @@ import ConfigParser
 import logging.handlers
 
 class MSDriver():
+    """
+
+    """
     def __init__(self):
         # Initializes settings file.
         self.settings = ConfigParser.SafeConfigParser()

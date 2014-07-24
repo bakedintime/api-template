@@ -1,0 +1,4 @@
+2014-07-24 11:13:28,733 - models - DEBUG - Executing query exec TSTSegurosSMS.dbo.claimSubscription ? with param: 123
+2014-07-24 11:15:47,055 - models - DEBUG - Executing query exec TSTSegurosSMS.dbo.claimSubscription ? with param: AHC844
+2014-07-24 11:16:59,431 - models - DEBUG - Executing query exec TSTSegurosSMS.dbo.claimSubscription ? with param: AHC844
+2014-07-24 11:17:25,408 - models - DEBUG - Executing query exec TSTSegurosSMS.dbo.claimSubscription ? with param: 98465
