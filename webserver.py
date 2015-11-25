@@ -30,7 +30,7 @@ handler = logging.handlers.RotatingFileHandler(
     backupCount=settings.get('Logging','backupCount')
 )
 handler.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(mes***REMOVED***ge)s')
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
 app.logger.addHandler(handler)
 
@@ -43,14 +43,14 @@ apiDescription = """<p>REST API description of insurance management. <br/> All r
   {
       'data': {},
       'errorCode': 'codigo',
-      'errorMes***REMOVED***ge': 'men***REMOVED***je de error',
+      'errorMessage': 'mensaje de error',
       'meta': {'status': 'success'} 
   }
   </pre>
   <br/>
   <p>
     The field <b>data</b> is replaced in every endpoint by its respective response.
-    Fields <b>data</b>, <b>errorCode</b> and <b>errorMes***REMOVED***ge</b> are optional and rely on the <b>status</b> in the header <b>meta</b>
+    Fields <b>data</b>, <b>errorCode</b> and <b>errorMessage</b> are optional and rely on the <b>status</b> in the header <b>meta</b>
   </p>
   <p>
     The API relies on Basic Authentication via Request Headers descibed as:
@@ -88,9 +88,9 @@ api = swagger.docs(
   produces=["application/json"],
   api_spec_url='/api/specs',
   info=dict(
-    title="© Grupo TIR, S.A.",
+    title="© Company Name",
     description=apiDescription,
-    contact="jdigherob@tir.com.gt",
+    contact="contact@email.com",
   )
 )
 
@@ -112,7 +112,7 @@ def auth_error():
   response = BaseResponseFields(
     status='error',
     data=None,
-    errorMes***REMOVED***ge=u'Las credenciales no son válidas. Acceso denegado.',
+    errorMessage=u'Las credenciales no son válidas. Acceso denegado.',
     errorCode='TE0002'
   )
   return wrap_response(response, 500, {'Content-Type':'application/json'})
@@ -185,20 +185,20 @@ class BaseResponseFields:
   resource_fields = {
     'meta':fields.Nested(MetaFields.resource_fields),
     'errorCode':fields.String,
-    'errorMes***REMOVED***ge':fields.String,
+    'errorMessage':fields.String,
     'data':fields.Raw
   }
 
-  def __init__(self, status, data, errorCode=None, errorMes***REMOVED***ge=None):
+  def __init__(self, status, data, errorCode=None, errorMessage=None):
     """
       Base response constructor.
-      errorCode and errorMes***REMOVED***ge are only instatiated
+      errorCode and errorMessage are only instatiated
       when an error has ocurred.
     """
     self.meta = {}
     self.meta['status'] = status
     self.data = data
-    self.errorMes***REMOVED***ge = errorMes***REMOVED***ge
+    self.errorMessage = errorMessage
     self.errorCode = errorCode
 
 
@@ -277,7 +277,7 @@ class SubscriptionChangeNumberResponse:
   """
   """
   resource_fields = {
-    'mes***REMOVED***ge':fields.String()
+    'message':fields.String()
   }
 
 def wrap_response(response, status, headers):
@@ -291,10 +291,10 @@ def wrap_response(response, status, headers):
 
 class SubscriptionBilling(Resource):
   @swagger.operation(
-    notes="""These endpoint can receive from one two many batch requests within the ***REMOVED***me payload. <br/>
+    notes="""These endpoint can receive from one two many batch requests within the same payload. <br/>
       fechaHora represented in ISO 8601 datetime string (e.g. 2014-05-08T23:41:54.000Z). <br/>
       <br/>
-      <b>Note:</b> The field <b>id</b> in the response and request of batch operations is only used for mapping the result of each individual tran***REMOVED***ction. When there is only one tran***REMOVED***ction this field is optional.
+      <b>Note:</b> The field <b>id</b> in the response and request of batch operations is only used for mapping the result of each individual transaction. When there is only one transaction this field is optional.
       <br/>
       <br/>
       <b>Curl Example</b> (with test user and password):  <br/>
@@ -314,10 +314,10 @@ class SubscriptionBilling(Resource):
         "paramType": "body"
       },
     ],
-    responseMes***REMOVED***ges=[
+    responseMessages=[
       {
         "code": 400,
-        "mes***REMOVED***ge":"""<pre>
+        "message":"""<pre>
         {
           "data": {
             "results": [
@@ -325,10 +325,10 @@ class SubscriptionBilling(Resource):
                 "id": "0",
                 "payload": {
                   "data": {
-                    "mes***REMOVED***ge":"Validación de campos incorrecta."
+                    "message":"Validación de campos incorrecta."
                   },
                   "errorCode": null,
-                  "errorMes***REMOVED***ge": null,
+                  "errorMessage": null,
                   "meta": {
                     "status": "fail"
                   }
@@ -337,7 +337,7 @@ class SubscriptionBilling(Resource):
             ]
           },
           "errorCode": null,
-          "errorMes***REMOVED***ge": null,
+          "errorMessage": null,
           "meta": {
             "status": "success"
           }
@@ -345,7 +345,7 @@ class SubscriptionBilling(Resource):
       },
       {
         "code": 404,
-        "mes***REMOVED***ge":"""<pre>
+        "message":"""<pre>
         {
           "data": {
             "results": [
@@ -353,10 +353,10 @@ class SubscriptionBilling(Resource):
                 "id": "0",
                 "payload": {
                   "data": {
-                    "mes***REMOVED***ge":"No existe certificado asignado a este número."
+                    "message":"No existe certificado asignado a este número."
                   },
                   "errorCode": null,
-                  "errorMes***REMOVED***ge": null,
+                  "errorMessage": null,
                   "meta": {
                     "status": "fail"
                   }
@@ -365,7 +365,7 @@ class SubscriptionBilling(Resource):
             ]
           },
           "errorCode": null,
-          "errorMes***REMOVED***ge": null,
+          "errorMessage": null,
           "meta": {
             "status": "success"
           }
@@ -373,11 +373,11 @@ class SubscriptionBilling(Resource):
       },
       {
         "code": 500,
-        "mes***REMOVED***ge": """<pre>
+        "message": """<pre>
         {
           "data": null,
           "errorCode": "TE0001",
-          "errorMes***REMOVED***ge": "El servicio no está disponible en este momento.",
+          "errorMessage": "El servicio no está disponible en este momento.",
           "meta": {
             "status": "error"
           }
@@ -397,8 +397,8 @@ class SubscriptionBilling(Resource):
       4:'TF0004',
       0:'TF0005',
     }
-    response_mes***REMOVED***ge = {
-      1:u'Suscripción cobrada éxito***REMOVED***mente.',
+    response_message = {
+      1:u'Suscripción cobrada éxitosamente.',
       2:u'El número de certificado y número de teléfono no coinciden.',
       3:u'El certificado asociado al número no se encuentra en un estado válido para su cobro.',
       4:u'El certificado no existe.',
@@ -419,11 +419,11 @@ class SubscriptionBilling(Resource):
         print str(e)
         payload = {
           "data": {
-            "mes***REMOVED***ge":"Campos inválidos. Todos los campos son nece***REMOVED***rios para realizar la operación.",
+            "message":"Campos inválidos. Todos los campos son necesarios para realizar la operación.",
             "code":"TF0001"
           },
           "errorCode": "null",
-          "errorMes***REMOVED***ge": "null",
+          "errorMessage": "null",
           "meta": {
             "status": "fail"
           }
@@ -439,11 +439,11 @@ class SubscriptionBilling(Resource):
       if (not montoCobro) or (not noCertificado) or (not noTelefono) or (not _id):
         payload = {
           "data": {
-            "mes***REMOVED***ge":"Campos inválidos. Todos los campos son nece***REMOVED***rios para realizar la operación.",
+            "message":"Campos inválidos. Todos los campos son necesarios para realizar la operación.",
             "code":"TF0001"
           },
           "errorCode": "null",
-          "errorMes***REMOVED***ge": "null",
+          "errorMessage": "null",
           "meta": {
             "status": "fail"
           }
@@ -456,9 +456,9 @@ class SubscriptionBilling(Resource):
             result = result[0]
             if result == 1:
               payload = {
-                "data": {"mes***REMOVED***ge":response_mes***REMOVED***ge[result]},
+                "data": {"message":response_message[result]},
                 "errorCode": "null",
-                "errorMes***REMOVED***ge": "null",
+                "errorMessage": "null",
                 "meta": {
                   "status": "success"
                 }
@@ -468,10 +468,10 @@ class SubscriptionBilling(Resource):
               payload = {
                 "data": {
                   "code":response_codes[result],
-                  "mes***REMOVED***ge":response_mes***REMOVED***ge[result]
+                  "message":response_message[result]
                 },
                 "errorCode": "null",
-                "errorMes***REMOVED***ge": "null",
+                "errorMessage": "null",
                 "meta": {
                   "status": "fail"
                 }
@@ -482,7 +482,7 @@ class SubscriptionBilling(Resource):
             response = BaseResponseFields(
               status='error',
               data=None,
-              errorMes***REMOVED***ge=u'Error Interno.',
+              errorMessage=u'Error Interno.',
               errorCode='TE0001'
             )
             status = 500
@@ -491,11 +491,11 @@ class SubscriptionBilling(Resource):
           print str(e)
           payload = {
             "data": {
-              "mes***REMOVED***ge":"Formato de fecha inválida. Validar que el formato de la fecha sea correspondiente al ISO8601.",
+              "message":"Formato de fecha inválida. Validar que el formato de la fecha sea correspondiente al ISO8601.",
               "code":"TF0006"
             },
             "errorCode": "null",
-            "errorMes***REMOVED***ge": "null",
+            "errorMessage": "null",
             "meta": {
               "status": "fail"
             }
@@ -511,7 +511,7 @@ class SubscriptionBilling(Resource):
       data={
         "results":responses
       },
-      errorMes***REMOVED***ge=None,
+      errorMessage=None,
       errorCode=None
     )
     status = 200
@@ -523,10 +523,10 @@ class SubscriptionCancellation(Resource):
   """
   @swagger.operation(
     notes=
-    """These endpoint can receive from one two many batch requests within the ***REMOVED***me payload. <br/>
+    """These endpoint can receive from one two many batch requests within the same payload. <br/>
       <em>fechaHora</em> represented in ISO 8601 datetime string (e.g. 2014-05-08T23:41:54.000Z).<br/><br/>
-      <b>Note:</b> The field <b>id</b> in the response and request of batch operations is only used for mapping the result of each individual tran***REMOVED***ction.
-      When there is only one tran***REMOVED***ction this field is optional.
+      <b>Note:</b> The field <b>id</b> in the response and request of batch operations is only used for mapping the result of each individual transaction.
+      When there is only one transaction this field is optional.
       <br/>
       <br/>
       <b>Curl Example</b> (with test user and password):  <br/>
@@ -554,10 +554,10 @@ class SubscriptionCancellation(Resource):
     produces = [
       "application/json"
     ],
-    responseMes***REMOVED***ges=[
+    responseMessages=[
       {
         "code": 400,
-        "mes***REMOVED***ge":"""<pre>
+        "message":"""<pre>
         {
           "data": {
             "results": [
@@ -565,10 +565,10 @@ class SubscriptionCancellation(Resource):
                 "id": "0",
                 "payload": {
                   "data": {
-                    "mes***REMOVED***ge":"Mótivo no definido."
+                    "message":"Mótivo no definido."
                   },
                   "errorCode": null,
-                  "errorMes***REMOVED***ge": null,
+                  "errorMessage": null,
                   "meta": {
                     "status": "fail"
                   }
@@ -577,7 +577,7 @@ class SubscriptionCancellation(Resource):
             ]
           },
           "errorCode": null,
-          "errorMes***REMOVED***ge": null,
+          "errorMessage": null,
           "meta": {
             "status": "success"
           }
@@ -585,7 +585,7 @@ class SubscriptionCancellation(Resource):
       },
       {
         "code": 404,
-        "mes***REMOVED***ge":"""<pre>
+        "message":"""<pre>
         {
           "data": {
             "results": [
@@ -593,10 +593,10 @@ class SubscriptionCancellation(Resource):
                 "id": "0",
                 "payload": {
                   "data": {
-                    "mes***REMOVED***ge":"No existe certificado para este número."
+                    "message":"No existe certificado para este número."
                   },
                   "errorCode": null,
-                  "errorMes***REMOVED***ge": null,
+                  "errorMessage": null,
                   "meta": {
                     "status": "fail"
                   }
@@ -605,7 +605,7 @@ class SubscriptionCancellation(Resource):
             ]
           },
           "errorCode": null,
-          "errorMes***REMOVED***ge": null,
+          "errorMessage": null,
           "meta": {
             "status": "success"
           }
@@ -613,11 +613,11 @@ class SubscriptionCancellation(Resource):
       },
       {
         "code": 500,
-        "mes***REMOVED***ge": """<pre>
+        "message": """<pre>
         {
           "data": null,
           "errorCode": "TE0001",
-          "errorMes***REMOVED***ge": "El servicio no está disponible en este momento.",
+          "errorMessage": "El servicio no está disponible en este momento.",
           "meta": {
             "status": "error"
           }
@@ -637,8 +637,8 @@ class SubscriptionCancellation(Resource):
       4:'TF0004',
       0:'TF0005',
     }
-    response_mes***REMOVED***ge = {
-      1:u'Suscripción cancelada éxito***REMOVED***mente.',
+    response_message = {
+      1:u'Suscripción cancelada éxitosamente.',
       2:u'El número de certificado y número de teléfono no coinciden.',
       3:u'El certificado asociado al número no se encuentra en un estado válido para su cancelación. Puede haber sido cancelado anteriormente.',
       4:u'El certificado no existe.',
@@ -657,11 +657,11 @@ class SubscriptionCancellation(Resource):
         print str(e)
         payload = {
           "data": {
-            "mes***REMOVED***ge":"Campos inválidos. Todos los campos son nece***REMOVED***rios para realizar la operación.",
+            "message":"Campos inválidos. Todos los campos son necesarios para realizar la operación.",
             "code":"TF0001"
           },
           "errorCode": "null",
-          "errorMes***REMOVED***ge": "null",
+          "errorMessage": "null",
           "meta": {
             "status": "fail"
           }
@@ -677,11 +677,11 @@ class SubscriptionCancellation(Resource):
       if (not motivo) or (not noCertificado) or (not noTelefono) or (not _id):
         payload = {
           "data": {
-            "mes***REMOVED***ge":"Campos inválidos. Todos los campos son nece***REMOVED***rios para realizar la operación.",
+            "message":"Campos inválidos. Todos los campos son necesarios para realizar la operación.",
             "code":"TF0001"
           },
           "errorCode": "null",
-          "errorMes***REMOVED***ge": "null",
+          "errorMessage": "null",
           "meta": {
             "status": "fail"
           }
@@ -694,9 +694,9 @@ class SubscriptionCancellation(Resource):
             result = result[0]
             if result == 1:
               payload = {
-                "data": {"mes***REMOVED***ge":response_mes***REMOVED***ge[result]},
+                "data": {"message":response_message[result]},
                 "errorCode": "null",
-                "errorMes***REMOVED***ge": "null",
+                "errorMessage": "null",
                 "meta": {
                   "status": "success"
                 }
@@ -706,10 +706,10 @@ class SubscriptionCancellation(Resource):
               payload = {
                 "data": {
                   "code":response_codes[result],
-                  "mes***REMOVED***ge":response_mes***REMOVED***ge[result]
+                  "message":response_message[result]
                 },
                 "errorCode": "null",
-                "errorMes***REMOVED***ge": "null",
+                "errorMessage": "null",
                 "meta": {
                   "status": "fail"
                 }
@@ -720,7 +720,7 @@ class SubscriptionCancellation(Resource):
             response = BaseResponseFields(
               status='error',
               data=None,
-              errorMes***REMOVED***ge=u'Error Interno.',
+              errorMessage=u'Error Interno.',
               errorCode='TE0001'
             )
             status = 500
@@ -729,11 +729,11 @@ class SubscriptionCancellation(Resource):
           print str(e)
           payload = {
             "data": {
-              "mes***REMOVED***ge":"Formato de fecha inválida. Validar que el formato de la fecha sea correspondiente al ISO8601.",
+              "message":"Formato de fecha inválida. Validar que el formato de la fecha sea correspondiente al ISO8601.",
               "code":"TF0006"
             },
             "errorCode": "null",
-            "errorMes***REMOVED***ge": "null",
+            "errorMessage": "null",
             "meta": {
               "status": "fail"
             }
@@ -749,7 +749,7 @@ class SubscriptionCancellation(Resource):
       data={
         "results":responses
       },
-      errorMes***REMOVED***ge=None,
+      errorMessage=None,
       errorCode=None
     )
     status = 200
@@ -777,10 +777,10 @@ class SubscriptionStatus(Resource):
         "paramType": "path"
       },
     ],
-    responseMes***REMOVED***ges=[
+    responseMessages=[
       {
         "code": 200,
-        "mes***REMOVED***ge":"""<pre>
+        "message":"""<pre>
         {
           "data": {
             "numeroCertificado":'TST123',
@@ -791,7 +791,7 @@ class SubscriptionStatus(Resource):
             "cobertura":500
           },
           "errorCode": null,
-          "errorMes***REMOVED***ge": null,
+          "errorMessage": null,
           "meta": {
             "status": "success"
           }
@@ -799,14 +799,14 @@ class SubscriptionStatus(Resource):
       },
       {
         "code": 400,
-        "mes***REMOVED***ge":"""<pre>
+        "message":"""<pre>
         {
           "data": {
-            "mes***REMOVED***ge": "No cumple con plazo mínimo de uso antes de reclamo.",
+            "message": "No cumple con plazo mínimo de uso antes de reclamo.",
             "code": "TF0002"
           },
           "errorCode": null,
-          "errorMes***REMOVED***ge": null,
+          "errorMessage": null,
           "meta": {
             "status": "fail"
           }
@@ -814,14 +814,14 @@ class SubscriptionStatus(Resource):
       },
       {
         "code": 400,
-        "mes***REMOVED***ge":"""<pre>
+        "message":"""<pre>
         {
           "data": {
-            "mes***REMOVED***ge": "El certificado asociado al número no se encuentra en estado activo o cancelado.",
+            "message": "El certificado asociado al número no se encuentra en estado activo o cancelado.",
             "code": "TF0003"
           },
           "errorCode": null,
-          "errorMes***REMOVED***ge": null,
+          "errorMessage": null,
           "meta": {
             "status": "fail"
           }
@@ -829,14 +829,14 @@ class SubscriptionStatus(Resource):
       },
       {
         "code": 400,
-        "mes***REMOVED***ge":"""<pre>
+        "message":"""<pre>
         {
           "data": {
-            "mes***REMOVED***ge": "No existe bloqueo para último certificado de este número.",
+            "message": "No existe bloqueo para último certificado de este número.",
             "code": "TF0004"
           },
           "errorCode": null,
-          "errorMes***REMOVED***ge": null,
+          "errorMessage": null,
           "meta": {
             "status": "fail"
           }
@@ -844,14 +844,14 @@ class SubscriptionStatus(Resource):
       },
       {
         "code": 400,
-        "mes***REMOVED***ge":"""<pre>
+        "message":"""<pre>
         {
           "data": {
-            "mes***REMOVED***ge": "Estatus: Reclamo inválido. Fecha de bloqueo no procede.",
+            "message": "Estatus: Reclamo inválido. Fecha de bloqueo no procede.",
             "code": "TF0005"
           },
           "errorCode": null,
-          "errorMes***REMOVED***ge": null,
+          "errorMessage": null,
           "meta": {
             "status": "fail"
           }
@@ -859,14 +859,14 @@ class SubscriptionStatus(Resource):
       },
       {
         "code": 404,
-        "mes***REMOVED***ge":"""<pre>
+        "message":"""<pre>
         {
           "data": {
-            "mes***REMOVED***ge": "No existe certificado para el número 50212345678.",
+            "message": "No existe certificado para el número 50212345678.",
             "code": "TF0001"
           },
           "errorCode": null,
-          "errorMes***REMOVED***ge": null,
+          "errorMessage": null,
           "meta": {
             "status": "fail"
           }
@@ -874,11 +874,11 @@ class SubscriptionStatus(Resource):
       },
       {
         "code": 500,
-        "mes***REMOVED***ge": """<pre>
+        "message": """<pre>
         {
           "data": null,
           "errorCode": "TE0001",
-          "errorMes***REMOVED***ge": "El servicio no está disponible en este momento.",
+          "errorMessage": "El servicio no está disponible en este momento.",
           "meta": {
             "status": "error"
           }
@@ -886,11 +886,11 @@ class SubscriptionStatus(Resource):
       },
       {
         "code": 500,
-        "mes***REMOVED***ge": """<pre>
+        "message": """<pre>
         {
           "data": null,
           "errorCode": "TE0002",
-          "errorMes***REMOVED***ge": "Error Interno.",
+          "errorMessage": "Error Interno.",
           "meta": {
             "status": "error"
           }
@@ -910,7 +910,7 @@ class SubscriptionStatus(Resource):
       0:'TF0005',
       5:'TE0002'
     }
-    response_mes***REMOVED***ge = {
+    response_message = {
       2:u'No cumple con plazo mínimo de uso antes de reclamo.',
       3:u'El certificado asociado al número no se encuentra en estado activo o cancelado.',
       4:u'No existe bloqueo para último certificado de este número.',
@@ -919,13 +919,13 @@ class SubscriptionStatus(Resource):
     }
     try:
       if not msdriver.exists_certificate(numeroTelefono,'robos'):
-        response_mes***REMOVED***ge = u'No existe certificado para el número %s.' % (numeroTelefono)
-        app.logger.info(response_mes***REMOVED***ge)
+        response_message = u'No existe certificado para el número %s.' % (numeroTelefono)
+        app.logger.info(response_message)
         response = BaseResponseFields(
           status='fail',
           data={
             'code':'TF0001',
-            'mes***REMOVED***ge':response_mes***REMOVED***ge
+            'message':response_message
           }
         )
         status = 404
@@ -951,7 +951,7 @@ class SubscriptionStatus(Resource):
         response = BaseResponseFields(
           status='error',
           data=None,
-          errorMes***REMOVED***ge= response_mes***REMOVED***ge[result['response']],
+          errorMessage= response_message[result['response']],
           errorCode= response_codes[result['response']]
         )
         status = 500
@@ -960,7 +960,7 @@ class SubscriptionStatus(Resource):
           status='fail',
           data={
             'code': response_codes[result['response']],
-            'mes***REMOVED***ge': response_mes***REMOVED***ge[result['response']],
+            'message': response_message[result['response']],
           }
         )
         status = 400  
@@ -970,7 +970,7 @@ class SubscriptionStatus(Resource):
       response = BaseResponseFields(
         status='error',
         data=None,
-        errorMes***REMOVED***ge= response_mes***REMOVED***ge[5],
+        errorMessage= response_message[5],
         errorCode= response_codes[5]
       )
       status = 500
@@ -1003,16 +1003,16 @@ class SubscriptionClaim(Resource):
         "paramType": "form"
       }
     ],
-    responseMes***REMOVED***ges=[
+    responseMessages=[
       {
         "code": 200,
-        "mes***REMOVED***ge":"""<pre>
+        "message":"""<pre>
         {
           "data": {
             "cobertura": 500,
           },
           "errorCode": null,
-          "errorMes***REMOVED***ge": null,
+          "errorMessage": null,
           "meta": {
             "status": "success"
           }
@@ -1020,14 +1020,14 @@ class SubscriptionClaim(Resource):
       },
       {
         "code": 400,
-        "mes***REMOVED***ge":"""<pre>
+        "message":"""<pre>
         {
           "data": {
-            "mes***REMOVED***ge": "El campo de código de reclamo no debe estar vacío.",
+            "message": "El campo de código de reclamo no debe estar vacío.",
             "code": "TF0001"
           },
           "errorCode": null,
-          "errorMes***REMOVED***ge": null,
+          "errorMessage": null,
           "meta": {
             "status": "fail"
           }
@@ -1035,14 +1035,14 @@ class SubscriptionClaim(Resource):
       },
       {
         "code": 404,
-        "mes***REMOVED***ge":"""<pre>
+        "message":"""<pre>
         {
           "data": {
-            "mes***REMOVED***ge": "El código de reclamo no existe.",
+            "message": "El código de reclamo no existe.",
             "code": "TF0001"
           },
           "errorCode": null,
-          "errorMes***REMOVED***ge": null,
+          "errorMessage": null,
           "meta": {
             "status": "fail"
           }
@@ -1050,11 +1050,11 @@ class SubscriptionClaim(Resource):
       },
       {
         "code": 500,
-        "mes***REMOVED***ge": """<pre>
+        "message": """<pre>
         {
           "data": null,
           "errorCode": "TE0001",
-          "errorMes***REMOVED***ge": "El servicio no está disponible en este momento.",
+          "errorMessage": "El servicio no está disponible en este momento.",
           "meta": {
             "status": "error"
           }
@@ -1062,11 +1062,11 @@ class SubscriptionClaim(Resource):
       },
       {
         "code": 500,
-        "mes***REMOVED***ge": """<pre>
+        "message": """<pre>
         {
           "data": null,
           "errorCode": "TE0002",
-          "errorMes***REMOVED***ge": "Error Interno.",
+          "errorMessage": "Error Interno.",
           "meta": {
             "status": "error"
           }
@@ -1081,7 +1081,7 @@ class SubscriptionClaim(Resource):
       'a':'TF0002',
       'b':'TF0003',
     }
-    response_mes***REMOVED***ge = {
+    response_message = {
       'a':u'El certificado ya ha sido pagado.',
       'b':u'El código de reclamo no existe.',
     }
@@ -1091,7 +1091,7 @@ class SubscriptionClaim(Resource):
         status='fail',
         data={
           'code':'TF0002',
-          'mes***REMOVED***ge':u'El campo de código de reclamo no debe estar vacío.'
+          'message':u'El campo de código de reclamo no debe estar vacío.'
         }
       )
       status = 400
@@ -1111,7 +1111,7 @@ class SubscriptionClaim(Resource):
           status='fail',
           data={
             'code':response_codes[result],
-            'mes***REMOVED***ge':response_mes***REMOVED***ge[result],
+            'message':response_message[result],
           }
         )
         status = 400 
@@ -1122,7 +1122,7 @@ class SubscriptionClaim(Resource):
         status='error',
         data={
           'code':'TE0002',
-          'mes***REMOVED***ge':u'Error interno'
+          'message':u'Error interno'
         }
       )
       status = 400
@@ -1132,7 +1132,7 @@ class SubscriptionClaim(Resource):
       response = BaseResponseFields(
         status='error',
         data=None,
-        errorMes***REMOVED***ge= u'Error Interno',
+        errorMessage= u'Error Interno',
         errorCode= 'TE0002'
       )
       status = 500
@@ -1182,16 +1182,16 @@ class SubscriptionChangeNumber(Resource):
         "paramType": "form"
       }
     ],
-    responseMes***REMOVED***ges=[
+    responseMessages=[
       {
         "code": 200,
-        "mes***REMOVED***ge":"""<pre>
+        "message":"""<pre>
         {
           "data": {
-            "mes***REMOVED***ge": "Datos actualizados éxito***REMOVED***mente.",
+            "message": "Datos actualizados éxitosamente.",
           },
           "errorCode": null,
-          "errorMes***REMOVED***ge": null,
+          "errorMessage": null,
           "meta": {
             "status": "success"
           }
@@ -1199,13 +1199,13 @@ class SubscriptionChangeNumber(Resource):
       },
       { 
         "code":400,
-        "mes***REMOVED***ge":"""<pre>{
+        "message":"""<pre>{
           "data": {
-            "mes***REMOVED***ge": "El número enviado ya tiene otro IMEI asignado",
+            "message": "El número enviado ya tiene otro IMEI asignado",
             "code": "TF0002"
           },
           "errorCode": null,
-          "errorMes***REMOVED***ge": null,
+          "errorMessage": null,
           "meta": {
             "status": "fail"
           }
@@ -1213,14 +1213,14 @@ class SubscriptionChangeNumber(Resource):
       },
       {
         "code": 400,
-        "mes***REMOVED***ge":"""<pre>
+        "message":"""<pre>
         {
           "data": {
-            "mes***REMOVED***ge": "Los campos de IMEI y numeroTelefono no deben estar vacíos.",
+            "message": "Los campos de IMEI y numeroTelefono no deben estar vacíos.",
             "code": "TF0001"
           },
           "errorCode": null,
-          "errorMes***REMOVED***ge": null,
+          "errorMessage": null,
           "meta": {
             "status": "fail"
           }
@@ -1228,11 +1228,11 @@ class SubscriptionChangeNumber(Resource):
       },
       {
         "code": 500,
-        "mes***REMOVED***ge": """<pre>
+        "message": """<pre>
         {
           "data": null,
           "errorCode": "TE0001",
-          "errorMes***REMOVED***ge": "El servicio no está disponible en este momento.",
+          "errorMessage": "El servicio no está disponible en este momento.",
           "meta": {
             "status": "error"
           }
@@ -1240,11 +1240,11 @@ class SubscriptionChangeNumber(Resource):
       },
       {
         "code": 500,
-        "mes***REMOVED***ge": """<pre>
+        "message": """<pre>
         {
           "data": null,
           "errorCode": "TE0002",
-          "errorMes***REMOVED***ge": "Error Interno.",
+          "errorMessage": "Error Interno.",
           "meta": {
             "status": "error"
           }
@@ -1263,7 +1263,7 @@ class SubscriptionChangeNumber(Resource):
         status='fail',
         data={
           'code':'TF0002',
-          'mes***REMOVED***ge':u'Los campos de IMEI y numeroTelefono no deben estar vacíos.'
+          'message':u'Los campos de IMEI y numeroTelefono no deben estar vacíos.'
         }
       )
       status = 400
@@ -1274,7 +1274,7 @@ class SubscriptionChangeNumber(Resource):
         response = BaseResponseFields(
           status='success',
           data={
-            'mes***REMOVED***ge':'Datos actualizados éxito***REMOVED***mente.',
+            'message':'Datos actualizados éxitosamente.',
           }
         )
         status = 200
@@ -1283,7 +1283,7 @@ class SubscriptionChangeNumber(Resource):
           status='fail',
           data={
             'code':'TF0001',
-            'mes***REMOVED***ge':u'El IMEI no existe en la base de datos.',
+            'message':u'El IMEI no existe en la base de datos.',
           }
         )
         status = 404
@@ -1294,7 +1294,7 @@ class SubscriptionChangeNumber(Resource):
         status='fail',
         data={
           'code':'TF0002',
-          'mes***REMOVED***ge':u'El número enviado ya tiene otro IMEI asignado'
+          'message':u'El número enviado ya tiene otro IMEI asignado'
         }
       )
       status = 400
@@ -1304,7 +1304,7 @@ class SubscriptionChangeNumber(Resource):
       response = BaseResponseFields(
         status='error',
         data=None,
-        errorMes***REMOVED***ge= u'Error Interno',
+        errorMessage= u'Error Interno',
         errorCode= 'TE0002'
       )
       status = 500

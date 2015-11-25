@@ -28,8 +28,8 @@ $(function() {
 	// Parent may need a min-height for this to work..
 	$('ul.downplayed li div.content p').vAlign();
 
-	// When a ***REMOVED***ndbox form is submitted..
-	$("form.***REMOVED***ndbox").submit(function(){
+	// When a sandbox form is submitted..
+	$("form.sandbox").submit(function(){
 
 		var error_free = true;
 
@@ -384,7 +384,7 @@ function program14(depth0,data) {
 function program16(depth0,data) {
   
   
-  return "\n          <div style='margin:0;padding:0;display:inline'></div>\n          <h4>Response Mes***REMOVED***ges</h4>\n          <table class='fullwidth'>\n            <thead>\n            <tr>\n              <th>HTTP Status Code</th>\n              <th>Reason</th>\n              <th>Response Model</th>\n            </tr>\n            </thead>\n            <tbody class=\"operation-status\">\n            \n            </tbody>\n          </table>\n          ";
+  return "\n          <div style='margin:0;padding:0;display:inline'></div>\n          <h4>Response Messages</h4>\n          <table class='fullwidth'>\n            <thead>\n            <tr>\n              <th>HTTP Status Code</th>\n              <th>Reason</th>\n              <th>Response Model</th>\n            </tr>\n            </thead>\n            <tbody class=\"operation-status\">\n            \n            </tbody>\n          </table>\n          ";
   }
 
 function program18(depth0,data) {
@@ -396,7 +396,7 @@ function program18(depth0,data) {
 function program20(depth0,data) {
   
   
-  return "\n          <div class='***REMOVED***ndbox_header'>\n            <input class='submit' name='commit' type='button' value='Try it out!' />\n            <a href='#' class='response_hider' style='display:none'>Hide Response</a>\n            <img alt='Throbber' class='response_throbber' src='docs/images/throbber.gif' style='display:none' />\n          </div>\n          ";
+  return "\n          <div class='sandbox_header'>\n            <input class='submit' name='commit' type='button' value='Try it out!' />\n            <a href='#' class='response_hider' style='display:none'>Hide Response</a>\n            <img alt='Throbber' class='response_throbber' src='docs/images/throbber.gif' style='display:none' />\n          </div>\n          ";
   }
 
   buffer += "\n  <ul class='operations' >\n    <li class='";
@@ -482,11 +482,11 @@ function program20(depth0,data) {
   buffer += "\n        ";
   stack1 = helpers['if'].call(depth0, depth0.type, {hash:{},inverse:self.noop,fn:self.program(12, program12, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n        <form accept-charset='UTF-8' class='***REMOVED***ndbox'>\n          <div style='margin:0;padding:0;display:inline'></div>\n          ";
+  buffer += "\n        <form accept-charset='UTF-8' class='sandbox'>\n          <div style='margin:0;padding:0;display:inline'></div>\n          ";
   stack1 = helpers['if'].call(depth0, depth0.parameters, {hash:{},inverse:self.noop,fn:self.program(14, program14, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n          ";
-  stack1 = helpers['if'].call(depth0, depth0.responseMes***REMOVED***ges, {hash:{},inverse:self.noop,fn:self.program(16, program16, data),data:data});
+  stack1 = helpers['if'].call(depth0, depth0.responseMessages, {hash:{},inverse:self.noop,fn:self.program(16, program16, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n          ";
   stack1 = helpers['if'].call(depth0, depth0.isReadOnly, {hash:{},inverse:self.program(20, program20, data),fn:self.program(18, program18, data),data:data});
@@ -1178,8 +1178,8 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   else { stack1 = depth0.signature; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n    </div>\n\n    <div class=\"snippet\">\n        <pre><code>";
-  if (stack1 = helpers.***REMOVED***mpleJSON) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.***REMOVED***mpleJSON; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  if (stack1 = helpers.sampleJSON) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.sampleJSON; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
     + "</code></pre>\n        <small class=\"notice\"></small>\n    </div>\n</div>\n\n";
   return buffer;
@@ -1199,8 +1199,8 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   else { stack1 = depth0.code; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
     + "</td>\n<td>";
-  if (stack1 = helpers.mes***REMOVED***ge) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.mes***REMOVED***ge; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  if (stack1 = helpers.message) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.message; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</td>\n<td width='50%'><span class=\"model-signature\" /></td>";
   return buffer;
@@ -1250,7 +1250,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         return _this.render();
       };
       this.options.progress = function(d) {
-        return _this.showMes***REMOVED***ge(d);
+        return _this.showMessage(d);
       };
       this.options.failure = function(d) {
         return _this.onLoadFailure(d);
@@ -1286,12 +1286,12 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
     SwaggerUi.prototype.render = function() {
       var _this = this;
-      this.showMes***REMOVED***ge('Finished Loading Resource Information. Rendering Swagger UI...');
+      this.showMessage('Finished Loading Resource Information. Rendering Swagger UI...');
       this.mainView = new MainView({
         model: this.api,
         el: $('#' + this.dom_id)
       }).render();
-      this.showMes***REMOVED***ge();
+      this.showMessage();
       switch (this.options.docExpansion) {
         case "full":
           Docs.expandOperationsForResource('');
@@ -1330,13 +1330,13 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
       }
     };
 
-    SwaggerUi.prototype.showMes***REMOVED***ge = function(data) {
+    SwaggerUi.prototype.showMessage = function(data) {
       if (data == null) {
         data = '';
       }
-      $('#mes***REMOVED***ge-bar').removeClass('mes***REMOVED***ge-fail');
-      $('#mes***REMOVED***ge-bar').addClass('mes***REMOVED***ge-success');
-      return $('#mes***REMOVED***ge-bar').html(data);
+      $('#message-bar').removeClass('message-fail');
+      $('#message-bar').addClass('message-success');
+      return $('#message-bar').html(data);
     };
 
     SwaggerUi.prototype.onLoadFailure = function(data) {
@@ -1344,9 +1344,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
       if (data == null) {
         data = '';
       }
-      $('#mes***REMOVED***ge-bar').removeClass('mes***REMOVED***ge-success');
-      $('#mes***REMOVED***ge-bar').addClass('mes***REMOVED***ge-fail');
-      val = $('#mes***REMOVED***ge-bar').html(data);
+      $('#message-bar').removeClass('message-success');
+      $('#message-bar').addClass('message-fail');
+      val = $('#message-bar').html(data);
       if (this.options.onFailure != null) {
         this.options.onFailure(data);
       }
@@ -1528,7 +1528,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     OperationView.prototype.invocationUrl = null;
 
     OperationView.prototype.events = {
-      'submit .***REMOVED***ndbox': 'submitOperation',
+      'submit .sandbox': 'submitOperation',
       'click .submit': 'submitOperation',
       'click .response_hider': 'hideResponse',
       'click .toggleOperation': 'toggleOperationContent',
@@ -1600,7 +1600,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
       $(this.el).html(Handlebars.templates.operation(this.model));
       if (this.model.responseClassSignature && this.model.responseClassSignature !== 'string') {
         signatureModel = {
-          ***REMOVED***mpleJSON: this.model.responseSampleJSON,
+          sampleJSON: this.model.responseSampleJSON,
           isParam: false,
           signature: this.model.responseClassSignature
         };
@@ -1637,7 +1637,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         param = _ref7[_k];
         this.addParameter(param, contentTypeModel.consumes);
       }
-      _ref8 = this.model.responseMes***REMOVED***ges;
+      _ref8 = this.model.responseMessages;
       for (_l = 0, _len3 = _ref8.length; _l < _len3; _l++) {
         statusCode = _ref8[_l];
         this.addStatusCode(statusCode);
@@ -1670,7 +1670,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
       if (e != null) {
         e.preventDefault();
       }
-      form = $('.***REMOVED***ndbox', $(this.el));
+      form = $('.sandbox', $(this.el));
       error_free = true;
       form.find("input.required").each(function() {
         var _this = this;
@@ -2007,7 +2007,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
       $(this.el).html(template(this.model));
       if (swaggerUi.api.models.hasOwnProperty(this.model.responseModel)) {
         responseModel = {
-          ***REMOVED***mpleJSON: JSON.stringify(swaggerUi.api.models[this.model.responseModel].createJSONSample(), null, 2),
+          sampleJSON: JSON.stringify(swaggerUi.api.models[this.model.responseModel].createJSONSample(), null, 2),
           isParam: false,
           signature: swaggerUi.api.models[this.model.responseModel].getMockSignature()
         };
@@ -2060,11 +2060,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
       template = this.template();
       $(this.el).html(template(this.model));
       signatureModel = {
-        ***REMOVED***mpleJSON: this.model.***REMOVED***mpleJSON,
+        sampleJSON: this.model.sampleJSON,
         isParam: true,
         signature: this.model.signature
       };
-      if (this.model.***REMOVED***mpleJSON) {
+      if (this.model.sampleJSON) {
         signatureView = new SignatureView({
           model: signatureModel,
           tagName: 'div'
@@ -2179,7 +2179,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         }
         textArea = $('textarea', $(this.el.parentNode.parentNode.parentNode));
         if ($.trim(textArea.val()) === '') {
-          return textArea.val(this.model.***REMOVED***mpleJSON);
+          return textArea.val(this.model.sampleJSON);
         }
       }
     };

@@ -232,7 +232,7 @@ break;
 case 18: this.$ = $$[$0-1]; 
 break;
 case 19:
-    // Parsing out the '&' escape token at this level ***REMOVED***ves ~500 bytes after min due to the removal of one parser node.
+    // Parsing out the '&' escape token at this level saves ~500 bytes after min due to the removal of one parser node.
     this.$ = new yy.MustacheNode($$[$0-1][0], $$[$0-1][1], $$[$0-2][2] === '&');
   
 break;
@@ -809,9 +809,9 @@ Handlebars.AST.CommentNode = function(comment) {
 ;
 // lib/handlebars/utils.js
 
-var errorProps = ['description', 'fileName', 'lineNumber', 'mes***REMOVED***ge', 'name', 'number', 'stack'];
+var errorProps = ['description', 'fileName', 'lineNumber', 'message', 'name', 'number', 'stack'];
 
-Handlebars.Exception = function(mes***REMOVED***ge) {
+Handlebars.Exception = function(message) {
   var tmp = Error.prototype.constructor.apply(this, arguments);
 
   // Unfortunately errors are not enumerable in Chrome (at least), so `for prop in tmp` doesn't work.
@@ -855,7 +855,7 @@ Handlebars.Utils = {
   },
 
   escapeExpression: function(string) {
-    // don't escape SafeStrings, since they're already ***REMOVED***fe
+    // don't escape SafeStrings, since they're already safe
     if (string instanceof Handlebars.SafeString) {
       return string.toString();
     } else if (string == null || string === false) {
@@ -888,15 +888,15 @@ Handlebars.Utils = {
 var Compiler = Handlebars.Compiler = function() {};
 var JavaScriptCompiler = Handlebars.JavaScriptCompiler = function() {};
 
-// the foundHelper register will di***REMOVED***mbiguate helper lookup from finding a
-// function in a context. This is neces***REMOVED***ry for mustache compatibility, which
+// the foundHelper register will disambiguate helper lookup from finding a
+// function in a context. This is necessary for mustache compatibility, which
 // requires that context functions in blocks are evaluated by blockHelperMissing,
 // and then proceed as if the resulting value was provided to blockHelperMissing.
 
 Compiler.prototype = {
   compiler: Compiler,
 
-  di***REMOVED***ssemble: function() {
+  disassemble: function() {
     var opcodes = this.opcodes, opcode, out = [], params, param;
 
     for (var i=0, l=opcodes.length; i<l; i++) {
@@ -1335,7 +1335,7 @@ JavaScriptCompiler.prototype = {
     this.environment = environment;
     this.options = options || {};
 
-    Handlebars.log(Handlebars.logger.DEBUG, this.environment.di***REMOVED***ssemble() + "\n\n");
+    Handlebars.log(Handlebars.logger.DEBUG, this.environment.disassemble() + "\n\n");
 
     this.name = this.environment.name;
     this.isChild = !!context;
@@ -1510,7 +1510,7 @@ JavaScriptCompiler.prototype = {
   //
   // On stack, before: hash, inverse, program, value
   // Compiler value, before: lastHelper=value of last found helper, if any
-  // On stack, after, if no lastHelper: ***REMOVED***me as [blockValue]
+  // On stack, after, if no lastHelper: same as [blockValue]
   // On stack, after, if lastHelper: value
   ambiguousBlockValue: function() {
     this.context.aliases.blockHelperMissing = 'helpers.blockHelperMissing';
@@ -1770,7 +1770,7 @@ JavaScriptCompiler.prototype = {
   // [invokeAmbiguous]
   //
   // On stack, before: hash, inverse, program, params..., ...
-  // On stack, after: result of di***REMOVED***mbiguation
+  // On stack, after: result of disambiguation
   //
   // This operation is used when an expression like `{{foo}}`
   // is provided, but we don't know at compile-time whether it

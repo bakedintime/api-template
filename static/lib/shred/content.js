@@ -55,7 +55,7 @@ Object.defineProperties(Content.prototype,{
   },
 
 // - **data**. Typically accessed as `content.data`, reflects the content entity
-//   converted into Javascript data. This can be a string, if the `type` is, ***REMOVED***y,
+//   converted into Javascript data. This can be a string, if the `type` is, say,
 //   `text/plain`, but can also be a Javascript object. The conversion applied is
 //   based on the `processor` attribute. The `data` attribute can also be set
 //   directly, in which case the conversion will be done the other way, to infer
@@ -78,7 +78,7 @@ Object.defineProperties(Content.prototype,{
 
 // - **body**. Typically accessed as `content.body`, reflects the content entity
 //   as a UTF-8 string. It is the mirror of the `data` attribute. If you set the
-//   `data` attribute, the `body` attribute will be inferred and vice-ver***REMOVED***. If
+//   `data` attribute, the `body` attribute will be inferred and vice-versa. If
 //   you attempt to set both, an exception is raised.
   body: {
     get: function() {

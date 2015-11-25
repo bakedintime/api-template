@@ -14,7 +14,7 @@ class MSDriver():
         self.settings_path = 'conf/settings.cfg'
         self.settings.read(self.settings_path)
 
-        # Connects to mes***REMOVED***ges database.
+        # Connects to messages database.
         """self.segurosDB = pyodbc.connect(
             'DSN=%s;UID=%s;PWD=%s;DATABASE=%s' % 
             (
@@ -36,16 +36,16 @@ class MSDriver():
             backupCount=self.settings.get('Logging','backupCount')
         )
         handler.setLevel(logging.DEBUG)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(mes***REMOVED***ge)s')
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         handler.setFormatter(formatter)
         self.logger.addHandler(handler)
 
     def get_connection(self):
         return self.segurosDB.cursor()
 
-    def get_response_mes***REMOVED***ge(self, state, motif):
+    def get_response_message(self, state, motif):
         cursor = self.segurosDB.cursor()
-        query = "exec %s ?, ?, ?" % self.settings.get('DBSeguros','getResponseMes***REMOVED***ge')
+        query = "exec %s ?, ?, ?" % self.settings.get('DBSeguros','getResponseMessage')
         self.logger.debug('Executing query %s with params: %s, %s, %s' %
             (query, state, motif, '1778')
         )
@@ -54,15 +54,15 @@ class MSDriver():
         cursor.close()
         if row:
             try:
-                self.logger.debug('Obtained mes***REMOVED***ge is %s' % (row[0].decode('utf8')))
+                self.logger.debug('Obtained message is %s' % (row[0].decode('utf8')))
                 return row[0].decode('utf8')
             except Exception,e:
                 # cp1252 encoding is used on windows version
                 self.logger.debug('Decoding wasn\'t possible converting to unicode first. %s' % (str(e)))
-                self.logger.debug('Obtained mes***REMOVED***ge is %s' % (row[0].decode('cp1252')))
+                self.logger.debug('Obtained message is %s' % (row[0].decode('cp1252')))
                 return row[0].decode('cp1252')
         else:
-            return 'Este men***REMOVED***je no ha sido configurado'
+            return 'Este mensaje no ha sido configurado'
 
     # Stored procedures
 

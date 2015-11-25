@@ -265,9 +265,9 @@ SwaggerApi.prototype.selfReflect = function() {
   }
 };
 
-SwaggerApi.prototype.fail = function(mes***REMOVED***ge) {
-  this.failure(mes***REMOVED***ge);
-  throw mes***REMOVED***ge;
+SwaggerApi.prototype.fail = function(message) {
+  this.failure(message);
+  throw message;
 };
 
 SwaggerApi.prototype.setConsolidatedModels = function() {
@@ -451,7 +451,7 @@ SwaggerResource.prototype.addOperations = function(resource_path, ops, consumes,
           ref = o.items["type"] || o.items["$ref"];
         type = "array[" + ref + "]";
       }
-      responseMes***REMOVED***ges = o.responseMes***REMOVED***ges;
+      responseMessages = o.responseMessages;
       method = o.method;
       if (o.httpMethod) {
         method = o.httpMethod;
@@ -460,15 +460,15 @@ SwaggerResource.prototype.addOperations = function(resource_path, ops, consumes,
         consumes = o.supportedContentTypes;
       }
       if (o.errorResponses) {
-        responseMes***REMOVED***ges = o.errorResponses;
-        for (var j = 0; j < responseMes***REMOVED***ges.length; j++) {
-          r = responseMes***REMOVED***ges[j];
-          r.mes***REMOVED***ge = r.reason;
+        responseMessages = o.errorResponses;
+        for (var j = 0; j < responseMessages.length; j++) {
+          r = responseMessages[j];
+          r.message = r.reason;
           r.reason = null;
         }
       }
-      o.nickname = this.***REMOVED***nitize(o.nickname);
-      op = new SwaggerOperation(o.nickname, resource_path, method, o.parameters, o.summary, o.notes, type, responseMes***REMOVED***ges, this, consumes, produces, o.authorizations);
+      o.nickname = this.sanitize(o.nickname);
+      op = new SwaggerOperation(o.nickname, resource_path, method, o.parameters, o.summary, o.notes, type, responseMessages, this, consumes, produces, o.authorizations);
       this.operations[op.nickname] = op;
       output.push(this.operationsArray.push(op));
     }
@@ -476,7 +476,7 @@ SwaggerResource.prototype.addOperations = function(resource_path, ops, consumes,
   }
 };
 
-SwaggerResource.prototype.***REMOVED***nitize = function(nickname) {
+SwaggerResource.prototype.sanitize = function(nickname) {
   var op;
   op = nickname.replace(/[\s!@#$%^&*()_+=\[{\]};:<>|./?,\\'""-]/g, '_');
   //'
@@ -562,8 +562,8 @@ SwaggerModel.prototype.getMockSignature = function(modelsToIgnore) {
 };
 
 SwaggerModel.prototype.createJSONSample = function(modelsToIgnore) {
-  if(***REMOVED***mpleModels[this.name]) {
-    return ***REMOVED***mpleModels[this.name];
+  if(sampleModels[this.name]) {
+    return sampleModels[this.name];
   }
   else {
     var result = {};
@@ -659,7 +659,7 @@ SwaggerModelProperty.prototype.toString = function() {
   return str;
 };
 
-var SwaggerOperation = function(nickname, path, method, parameters, summary, notes, type, responseMes***REMOVED***ges, resource, consumes, produces, authorizations) {
+var SwaggerOperation = function(nickname, path, method, parameters, summary, notes, type, responseMessages, resource, consumes, produces, authorizations) {
   var _this = this;
 
   var errors = [];
@@ -670,7 +670,7 @@ var SwaggerOperation = function(nickname, path, method, parameters, summary, not
   this.summary = summary;
   this.notes = notes;
   this.type = type;
-  this.responseMes***REMOVED***ges = (responseMes***REMOVED***ges||[]);
+  this.responseMessages = (responseMessages||[]);
   this.resource = (resource||errors.push("Resource is required"));
   this.consumes = consumes;
   this.produces = produces;
@@ -709,7 +709,7 @@ var SwaggerOperation = function(nickname, path, method, parameters, summary, not
       param.allowableValues.values = ["true", "false"];
     }
     param.signature = this.getSignature(type, this.resource.models);
-    param.***REMOVED***mpleJSON = this.getSampleJSON(type, this.resource.models);
+    param.sampleJSON = this.getSampleJSON(type, this.resource.models);
 
     var enumValue = param["enum"];
     if(enumValue != null) {
@@ -1508,10 +1508,10 @@ PasswordAuthorization.prototype.apply = function(obj, authorizations) {
 
 var e = (typeof window !== 'undefined' ? window : exports);
 
-var ***REMOVED***mpleModels = {};
+var sampleModels = {};
 var cookies = {};
 
-e.SampleModels = ***REMOVED***mpleModels;
+e.SampleModels = sampleModels;
 e.SwaggerHttp = SwaggerHttp;
 e.SwaggerRequest = SwaggerRequest;
 e.authorizations = new SwaggerAuthorizations();

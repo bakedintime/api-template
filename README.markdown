@@ -39,7 +39,7 @@ From within virtual environment
 
 8. Clone repository (Assuming ssh-keys are already added):
 
-        git clone git@git.tir:seguros/seguro***REMOVED***pi.git
+        git clone git@git.tir:seguros/segurosapi.git
 
 9. Install requirements:
 
@@ -67,11 +67,11 @@ Deployment On *nix
 5. Reload supervisor and start the process
 
         sudo supervisorctl reload
-        sudo supervisorctl status (Check if is running otherwise: sudo supervisorctl start seguro***REMOVED***pi) 
+        sudo supervisorctl status (Check if is running otherwise: sudo supervisorctl start segurosapi) 
 
-6. If the status shows an unsuccessful mes***REMOVED***ge, check the logs:
+6. If the status shows an unsuccessful message, check the logs:
 
-        tail -200 /var/log/supervisor/seguro***REMOVED***pi/out.log
+        tail -200 /var/log/supervisor/segurosapi/out.log
 
 Troubleshooting
 --------

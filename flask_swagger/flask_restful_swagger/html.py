@@ -40,12 +40,12 @@ homepage_html = """
     <a id="logo">Seguros API</a>
     <form id='api_selector'>
       <div class='input'><input placeholder="http://example.com/api" id="input_baseUrl" name="baseUrl" type="text"/></div>
-      <div class='input'><input di***REMOVED***bled='di***REMOVED***bled' placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>
+      <div class='input'><input disabled='disabled' placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>
       <div class='input'><a id="explore" href="#">Explore</a></div>
     </form>
   </div>
 </div>
-<div id="mes***REMOVED***ge-bar" class="swagger-ui-wrap">&nbsp;</div>
+<div id="message-bar" class="swagger-ui-wrap">&nbsp;</div>
 <div id="swagger-ui-container" class="swagger-ui-wrap"></div>
   <script type="text/javascript" src="docs/lib/shred.bundle.js"></script>
   <script src='docs/lib/jquery-1.8.0.min.js' type='text/javascript'></script>

@@ -169,11 +169,11 @@ if (typeof process === 'undefined') process = {};
 if (!process.nextTick) process.nextTick = (function () {
     var queue = [];
     var canPost = typeof window !== 'undefined'
-        && window.postMes***REMOVED***ge && window.addEventListener
+        && window.postMessage && window.addEventListener
     ;
     
     if (canPost) {
-        window.addEventListener('mes***REMOVED***ge', function (ev) {
+        window.addEventListener('message', function (ev) {
             if (ev.source === window && ev.data === 'browserify-tick') {
                 ev.stopPropagation();
                 if (queue.length > 0) {
@@ -187,7 +187,7 @@ if (!process.nextTick) process.nextTick = (function () {
     return function (fn) {
         if (canPost) {
             queue.push(fn);
-            window.postMes***REMOVED***ge('browserify-tick', '*');
+            window.postMessage('browserify-tick', '*');
         }
         else setTimeout(fn, 0);
     };
@@ -266,7 +266,7 @@ for (var i = arguments.length; i >= -1 && !resolvedAbsolute; i--) {
 }
 
 // At this point the path should be resolved to a full absolute path, but
-// handle relative paths to be ***REMOVED***fe (might happen when process.cwd() fails)
+// handle relative paths to be safe (might happen when process.cwd() fails)
 
 // Normalize the path
 resolvedPath = normalizeArray(filter(resolvedPath.split('/'), function(p) {
@@ -419,26 +419,26 @@ require.define("/node_modules/ax/lib/ax.js", function (require, module, exports,
 // logger type interface
 //
 // we can easily replace this, provide the info, debug, etc. methods are the
-// ***REMOVED***me. or, we can change Haiku to use a more standard node.js interface
+// same. or, we can change Haiku to use a more standard node.js interface
 
-var format = function(level,mes***REMOVED***ge) {
+var format = function(level,message) {
   var debug = (level=="debug"||level=="error");
-  if (!mes***REMOVED***ge) { return mes***REMOVED***ge.toString(); }
-  if (typeof(mes***REMOVED***ge) == "object") {
-    if (mes***REMOVED***ge instanceof Error && debug) {
-      return mes***REMOVED***ge.stack;
+  if (!message) { return message.toString(); }
+  if (typeof(message) == "object") {
+    if (message instanceof Error && debug) {
+      return message.stack;
     } else {
-      return inspect(mes***REMOVED***ge);
+      return inspect(message);
     }
   } else {
-    return mes***REMOVED***ge.toString();
+    return message.toString();
   }
 };
 
-var noOp = function(mes***REMOVED***ge) { return this; }
+var noOp = function(message) { return this; }
 var makeLogger = function(level,fn) {
-  return function(mes***REMOVED***ge) { 
-    this.stream.write(this.format(level, mes***REMOVED***ge)+"\n");
+  return function(message) { 
+    this.stream.write(this.format(level, message)+"\n");
     return this;
   }
 };
@@ -453,7 +453,7 @@ var Logger = function(options) {
   options.prefix = options.prefix || "";
   logger.options = options;
 
-  // Allows a prefix to be added to the mes***REMOVED***ge.
+  // Allows a prefix to be added to the message.
   //
   //    var logger = new Ax({ module: 'Haiku' })
   //    logger.warn('this is going to be awesome!');
@@ -492,13 +492,13 @@ var Logger = function(options) {
 
 // Used to define logger methods
 Logger.writer = function(level){
-  return function(mes***REMOVED***ge){
+  return function(message){
     var logger = this;
 
     if(process.title === "node")
-  logger.stream.write(logger.format(level, mes***REMOVED***ge) + '\n');
+  logger.stream.write(logger.format(level, message) + '\n');
     else if(process.title === "browser")
-  logger.stream(logger.format(level, mes***REMOVED***ge) + '\n');
+  logger.stream(logger.format(level, message) + '\n');
 
   };
 }
@@ -509,15 +509,15 @@ Logger.prototype = {
   debug: function(){},
   warn: function(){},
   error: Logger.writer('error'),
-  format: function(level, mes***REMOVED***ge){
-    if (! mes***REMOVED***ge) return '';
+  format: function(level, message){
+    if (! message) return '';
 
     var logger = this
       , prefix = logger.options.prefix
       , timestamp = logger.options.timestamp ? " " + (new Date().toISOString()) : ""
     ;
 
-    return (prefix + timestamp + ": " + mes***REMOVED***ge);
+    return (prefix + timestamp + ": " + message);
   }
 };
 
@@ -818,7 +818,7 @@ var STATUS_CODES = HTTP.STATUS_CODES || {
     416 : 'Requested Range Not Satisfiable',
     417 : 'Expectation Failed',
     418 : 'I\'m a teapot', // RFC 2324
-    422 : 'Unproces***REMOVED***ble Entity', // RFC 4918
+    422 : 'Unprocessable Entity', // RFC 4918
     423 : 'Locked', // RFC 4918
     424 : 'Failed Dependency', // RFC 4918
     425 : 'Unordered Collection', // RFC 4918
@@ -1057,7 +1057,7 @@ Request.prototype.on = function (eventOrHash, listener) {
   return this;
 };
 
-// Add in the header methods. Again, these ensure we don't get the ***REMOVED***me header
+// Add in the header methods. Again, these ensure we don't get the same header
 // multiple times with different case conventions.
 HeaderMixins.gettersAndSetters(Request);
 
@@ -1171,7 +1171,7 @@ var createRequest = function(request) {
 
     // Construct a Shred `Response` object from the response. This will stream
     // the response, thus the need for the callback. We can access the response
-    // entity ***REMOVED***fely once we're in the callback.
+    // entity safely once we're in the callback.
     response = new Response(response, request, function(response) {
 
       // Set up some event magic. The precedence is given first to
@@ -1977,7 +1977,7 @@ Object.defineProperties(Content.prototype,{
   },
 
 // - **data**. Typically accessed as `content.data`, reflects the content entity
-//   converted into Javascript data. This can be a string, if the `type` is, ***REMOVED***y,
+//   converted into Javascript data. This can be a string, if the `type` is, say,
 //   `text/plain`, but can also be a Javascript object. The conversion applied is
 //   based on the `processor` attribute. The `data` attribute can also be set
 //   directly, in which case the conversion will be done the other way, to infer
@@ -2000,7 +2000,7 @@ Object.defineProperties(Content.prototype,{
 
 // - **body**. Typically accessed as `content.body`, reflects the content entity
 //   as a UTF-8 string. It is the mirror of the `data` attribute. If you set the
-//   `data` attribute, the `body` attribute will be inferred and vice-ver***REMOVED***. If
+//   `data` attribute, the `body` attribute will be inferred and vice-versa. If
 //   you attempt to set both, an exception is raised.
   body: {
     get: function() {
@@ -2114,8 +2114,8 @@ require.define("/shred/mixins/headers.js", function (require, module, exports, _
     // The header mixins allow you to add HTTP header support to any object. This
 // might seem pointless: why not simply use a hash? The main reason is that, per
 // the [HTTP spec](http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2),
-// headers are case-insensitive. So, for example, `content-type` is the ***REMOVED***me as
-// `CONTENT-TYPE` which is the ***REMOVED***me as `Content-Type`. Since there is no way to
+// headers are case-insensitive. So, for example, `content-type` is the same as
+// `CONTENT-TYPE` which is the same as `Content-Type`. Since there is no way to
 // overload the index operator in Javascript, using a hash to represent the
 // headers means it's possible to have two conflicting values for a single
 // header.
@@ -2525,7 +2525,7 @@ http.STATUS_CODES = {
     416 : 'Requested Range Not Satisfiable',
     417 : 'Expectation Failed',
     418 : 'I\'m a teapot', // RFC 2324
-    422 : 'Unproces***REMOVED***ble Entity', // RFC 4918
+    422 : 'Unprocessable Entity', // RFC 4918
     423 : 'Locked', // RFC 4918
     424 : 'Failed Dependency', // RFC 4918
     425 : 'Unordered Collection', // RFC 4918
@@ -2728,7 +2728,7 @@ Response.prototype.write = function () {
 
 require.define("/node_modules/http-browserify/lib/isSafeHeader.js", function (require, module, exports, __dirname, __filename) {
     // Taken from http://dxr.mozilla.org/mozilla/mozilla-central/content/base/src/nsXMLHttpRequest.cpp.html
-var un***REMOVED***feHeaders = [
+var unsafeHeaders = [
     "accept-charset",
     "accept-encoding",
     "access-control-request-headers",
@@ -2755,7 +2755,7 @@ var un***REMOVED***feHeaders = [
 
 module.exports = function (headerName) {
     if (!headerName) return false;
-    return (un***REMOVED***feHeaders.indexOf(headerName.toLowerCase()) === -1)
+    return (unsafeHeaders.indexOf(headerName.toLowerCase()) === -1)
 };
 
 });

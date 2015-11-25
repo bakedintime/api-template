@@ -18,9 +18,9 @@ supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
 [supervisorctl]
 serverurl=unix:///var/run//supervisor.sock ; 
 
-[program:seguro***REMOVED***pi]
-command=sh /home/administrador/webapps/seguro***REMOVED***pi/deployment/run.sh
-process_name=seguro***REMOVED***pi
+[program:segurosapi]
+command=sh /home/administrador/webapps/segurosapi/deployment/run.sh
+process_name=segurosapi
 numprocs=1
 directory=/tmp
 priotrity=1
@@ -29,11 +29,11 @@ autorestart=true
 startretries=3
 stopsignal=TERM
 redirect_stderr=true
-stdout_logfile=/var/log/supervisor/seguro***REMOVED***pi/out.log
+stdout_logfile=/var/log/supervisor/segurosapi/out.log
 stdout_logfile_maxbytes=2MB
 stdout_logfile_backups=5
 stdout_capture_maxbytes=2MB
-stderr_logfile=/var/log/supervisor/seguro***REMOVED***pi/error.log
+stderr_logfile=/var/log/supervisor/segurosapi/error.log
 stderr_logfile_maxbytes=2MB
 stderr_logfile_backups=5
 

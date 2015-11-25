@@ -143,7 +143,7 @@ def operation(**kwargs):
   """
   This dedorator marks a function as a swagger operation so that we can easily
   extract attributes from it.
-  It ***REMOVED***ves the decorator's key-values at the function level so we can later
+  It saves the decorator's key-values at the function level so we can later
   extract them later when add_resource is invoked.
   """
   def inner(f):
@@ -199,7 +199,7 @@ def add_model(model_class):
     for field_name, field_type in model_class.resource_fields.iteritems():
       nested_type = nested[field_name] if field_name in nested else None
       properties[field_name] = deduce_swagger_type(field_type, nested_type)
-      if ha***REMOVED***ttr(field_type,'default') and field_type.default is not None:
+      if hasattr(field_type,'default') and field_type.default is not None:
         properties[field_name]['default'] = field_type.default
       else:
         required.append(field_name)
